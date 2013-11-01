@@ -14,14 +14,14 @@ public class Setting extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-		if(Utils.getPreferenceStr(this,"getInfo","false").equals("true")){
-			this.checkBoxGetInfo.isChecked();
-		}
-		if(Utils.getPreferenceStr(this,"progressInfo","false").equals("true")){
-			this.checkBoxGetProgress.isChecked();
-		}
 		checkBoxGetInfo = (CheckBox) findViewById(R.id.getInfo);
 		checkBoxGetProgress = (CheckBox) findViewById(R.id.getProgressInfo);
+		if(Utils.getPreferenceStr(this,"getInfo","false").equals("true")){
+			this.checkBoxGetInfo.setChecked(true);
+		}
+		if(Utils.getPreferenceStr(this,"progressInfo","false").equals("true")){
+			this.checkBoxGetProgress.setChecked(true);
+		}
 		checkBoxGetInfo
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
