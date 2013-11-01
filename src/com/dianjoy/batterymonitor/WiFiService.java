@@ -15,9 +15,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
@@ -57,7 +54,10 @@ public class WiFiService extends Service {
 		registerReceiver(screenReceiver, screenFilter);
 		registerReceiver(screenReceiver, screenFilter);
 		getAPNType(WiFiService.this);
-		monitor();
+		if (Utils.getPreferenceStr(WiFiService.this, "getInfo").equals(
+				"true")) {
+			monitor();
+		}
 	}
 
 	private void monitor() {
@@ -90,7 +90,7 @@ public class WiFiService extends Service {
 					}
 				}
 			}
-		}, 10 * 60 * 1000l, 10 * 60 * 1000l);
+		},0, 15 * 60 * 1000l);
 	}
 
 	/**
@@ -159,9 +159,17 @@ public class WiFiService extends Service {
 			if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				// ½âËø
 				openNetwork();
+				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
+						"true")) {
+					clearProgress();
+				}
 
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				// ËøÆÁ
+				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
+						"true")) {
+					clearProgress();
+				}
 				closeNetwork();
 				getAPNType(WiFiService.this);
 			}
