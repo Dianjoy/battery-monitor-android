@@ -1,12 +1,14 @@
 package com.dianjoy.batterymonitor;
 
-import com.example.wifi_test.R;
-
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.app.Activity;
 import android.content.Intent;
 
 public class MainActivity extends Activity {
+	private Button btnSetting;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -14,8 +16,29 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		Intent startIntentService = new Intent();
 		startIntentService.setClassName(this,
-				"com.example.wifi_test.WiFiService");
+				"com.dianjoy.batterymonitor.WiFiService");
 		startService(startIntentService);
-		MobileManagerOp.setMobileData(this,true);
+		// MobileManagerOp.setMobileData(this,true);
+		btnSetting = (Button) findViewById(R.id.setting);
+		btnSetting.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+              Intent intentFilter=new Intent(MainActivity.this,Setting.class);
+              startActivity(intentFilter);
+			}
+		});
+	}
+
+	@Override
+	protected final void onStart() {
+		super.onStart();
+
+	}
+
+	@Override
+	protected final void onResume() {
+		super.onResume();
 	}
 }
