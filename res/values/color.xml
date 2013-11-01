@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="color_background">#000000</color>
+    <color name="color_rebody">#669966</color>
+    <color name="hours">#66FF66</color>
+    <color name="minutes">#3399CC</color>
+
+</resources>

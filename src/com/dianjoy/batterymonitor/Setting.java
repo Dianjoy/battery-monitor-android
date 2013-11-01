@@ -1,10 +1,12 @@
 package com.dianjoy.batterymonitor;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
 
 public class Setting extends Activity {
 	private CheckBox checkBoxGetInfo;
@@ -16,12 +18,17 @@ public class Setting extends Activity {
 		setContentView(R.layout.activity_setting);
 		checkBoxGetInfo = (CheckBox) findViewById(R.id.getInfo);
 		checkBoxGetProgress = (CheckBox) findViewById(R.id.getProgressInfo);
-		if(Utils.getPreferenceStr(this,"getInfo","false").equals("true")){
+		if (Utils.getPreferenceStr(this, "getInfo", "false").equals("true")) {
 			this.checkBoxGetInfo.setChecked(true);
 		}
-		if(Utils.getPreferenceStr(this,"progressInfo","false").equals("true")){
+		if (Utils.getPreferenceStr(this, "progressInfo", "false")
+				.equals("true")) {
 			this.checkBoxGetProgress.setChecked(true);
 		}
+		Typeface fontFace = Typeface.createFromAsset(getAssets(),
+				"fonts/stxingka.ttf");
+		TextView text = (TextView) findViewById(R.id.battery);
+		text.setTypeface(fontFace);
 		checkBoxGetInfo
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -29,11 +36,13 @@ public class Setting extends Activity {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						// TODO Auto-generated method stub
-                         if(isChecked){
-                        	 Utils.setPreferenceStr(Setting.this,"getInfo","true");
-                         }else{
-                        	 Utils.setPreferenceStr(Setting.this,"getInfo","false");
-                         }
+						if (isChecked) {
+							Utils.setPreferenceStr(Setting.this, "getInfo",
+									"true");
+						} else {
+							Utils.setPreferenceStr(Setting.this, "getInfo",
+									"false");
+						}
 					}
 				});
 
@@ -44,11 +53,13 @@ public class Setting extends Activity {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						// TODO Auto-generated method stub
-						 if(isChecked){
-                        	 Utils.setPreferenceStr(Setting.this,"progressInfo","true");
-                         }else{
-                        	 Utils.setPreferenceStr(Setting.this,"progressInfo","false");
-                         }
+						if (isChecked) {
+							Utils.setPreferenceStr(Setting.this,
+									"progressInfo", "true");
+						} else {
+							Utils.setPreferenceStr(Setting.this,
+									"progressInfo", "false");
+						}
 					}
 				});
 	}
