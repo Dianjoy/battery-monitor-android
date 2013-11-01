@@ -57,7 +57,10 @@ public class WiFiService extends Service {
 	@Override
 	public final void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		clearProgress();
+		if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
+				.equals("true")) {
+			clearProgress();
+		}
 	}
 
 	@Override
@@ -226,6 +229,15 @@ public class WiFiService extends Service {
 			Log.i("mobile", "me is mobile");
 			MobileManagerOp.setMobileData(WiFiService.this, true);
 		}
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(getAPNType(this)==-1){
+			closeNetwork();
+		}
 	}
 
 	private void clearProgress() {
@@ -374,7 +386,7 @@ public class WiFiService extends Service {
 				Utils.setPreferenceStr(context, BATTERY_STATUS,BATTERY_DISCHARGE);
 				if (isFirstDisCharge) {
 					// ·Åµç100mA
-					float stime = (battery_level / 100) * 2000 / 100f;
+					float stime = (battery_level / 100f) * 2000 / 100f;
 					stime = ((int) (stime * 10)) / 10f;
 					Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,stime+"");
 					first_discharge_battery_level = battery_level;

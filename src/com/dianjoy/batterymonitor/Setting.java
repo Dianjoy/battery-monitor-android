@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -137,13 +138,17 @@ public class Setting extends Activity {
 					}
 					status.setText("当前状态:充电");
 				} else {
-					status.setText("当前状态:放电");
-					if (Float.valueOf(
-							Utils.getPreferenceStr(Setting.this,
-									WiFiService.BATTERY_CHARGE_TIME, "0.0"))
-							.equals("0.0")) {
-						float stime = (battery_level / 100) * 2000 / 100l;
-						stime = ((int) (stime * 10)) / 10l;
+					if(intent.getIntExtra("status", -1) == BatteryManager.BATTERY_STATUS_FULL){
+						status.setText("当前状态:充电完毕");
+					}else{
+						status.setText("当前状态:放电");
+					}
+				
+					/*Log.i("dds", Utils.getPreferenceStr(Setting.this,
+									WiFiService.BATTERY_CHARGE_TIME, "0.0"));*/
+					if (Utils.getPreferenceStr(Setting.this,WiFiService.BATTERY_DISCHARGE_TIME,"").equals("")) {
+						float stime = (battery_level / 100f) * 2000 / 100f;
+						stime = ((int) (stime * 10)) / 10f;
 						hours.setText(String.valueOf((int) stime) + "H");
 						minutes.setText(String.valueOf(
 								(stime - (int) stime) * 60).substring(
@@ -153,7 +158,7 @@ public class Setting extends Activity {
 								+ "M");
 					} else {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
-								Setting.this, WiFiService.BATTERY_CHARGE_TIME,
+								Setting.this, WiFiService.BATTERY_DISCHARGE_TIME,
 								"0"));
 						hours.setText(String.valueOf((int) timeTemp) + "H");
 						minutes.setText(String.valueOf(
