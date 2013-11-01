@@ -2,73 +2,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-     android:gravity="center_vertical"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     tools:context=".Setting" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/battery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="100%"
             android:textSize="100sp"
             android:textStyle="bold" />
-        <!--
-        <LinearLayout
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dip"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal" >
+            android:layout_marginLeft="10dip"
+            android:textColor="@color/hours"
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:text="10h"
-                android:textColor="@color/hours"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:text="23min"
-                android:textColor="@color/minutes"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-        -->
+        <TextView
+            android:id="@+id/minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:textColor="@color/minutes"
+            android:textSize="25sp"
+            android:textStyle="bold" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/status"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dip"
         android:layout_marginLeft="20dip"
+        android:layout_marginTop="100dip"
         android:text="高级设置"
         android:textSize="25sp" />
 
     <CheckBox
-        android:layout_marginTop="10dip"
-        android:layout_marginLeft="45dip"
         android:id="@+id/getInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="45dip"
+        android:layout_marginTop="10dip"
         android:text=" 锁屏时允许接受消息" >
     </CheckBox>
 
     <CheckBox
-        android:layout_marginLeft="45dip"
         android:id="@+id/getProgressInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="45dip"
         android:text=" 解锁屏时自动清理后台进程" >
     </CheckBox>
 

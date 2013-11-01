@@ -47,6 +47,7 @@ public class WiFiService extends Service {
 	public static final String BATTERY_DISCHARGE_TIME="battery_discharge_time";
 	public static final String BATTERY_CHARGE="charge";
 	public static final String BATTERY_DISCHARGE="discharge";
+	public static final String BATTERY_LEVEL="battery_level";
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -314,6 +315,7 @@ public class WiFiService extends Service {
 				int scale = intent.getIntExtra("scale", -1);
 				if (rawlevel >= 0 && scale > 0) {
 					battery_level = (rawlevel * 100) / scale;
+					Utils.setPreferenceStr(context, BATTERY_LEVEL,String.valueOf(battery_level));
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
