@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dip"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
@@ -16,7 +17,7 @@
             android:id="@+id/battery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="100sp"
+            android:textSize="90sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dip"
         android:gravity="center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/hours"
@@ -48,9 +50,11 @@
 
     <TextView
         android:id="@+id/status"
-        android:gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:gravity="center_horizontal"
+        android:textSize="15sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,7 +62,8 @@
         android:layout_marginLeft="20dip"
         android:layout_marginTop="100dip"
         android:text="高级设置"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/getInfo"
@@ -66,7 +71,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dip"
         android:layout_marginTop="10dip"
-        android:text=" 锁屏时允许接受消息" >
+        android:text=" 锁屏时允许接受消息"
+        android:visibility="gone" >
     </CheckBox>
 
     <CheckBox
@@ -74,7 +80,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dip"
-        android:text=" 解锁屏时自动清理后台进程" >
+        android:text=" 解锁屏时自动清理后台进程"
+        android:visibility="gone" >
     </CheckBox>
+
+    <LinearLayout
+        android:id="@+id/bestSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="240dip"
+        android:gravity="left|center_vertical" >
+
+        <ImageView
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/gear" />
+
+        <TextView
+            android:text="设置"
+              android:textSize="25sp" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </LinearLayout>

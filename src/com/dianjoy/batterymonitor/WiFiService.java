@@ -26,6 +26,7 @@ import android.os.PowerManager;
 import android.util.Log;
 
 public class WiFiService extends Service {
+	private boolean screenStatus = false;
 	private static Method mReflectScreenState;
 	private static int wifiStatus = 0;
 	private static int mobileStatus = 0;
@@ -42,12 +43,13 @@ public class WiFiService extends Service {
 	private long last_discharge_time;
 	private boolean isFirstCharge = true;
 	private boolean isFirstDisCharge = true;
-	public static final String BATTERY_STATUS="battery_status";
-	public static final String BATTERY_CHARGE_TIME="battery_charge_time";
-	public static final String BATTERY_DISCHARGE_TIME="battery_discharge_time";
-	public static final String BATTERY_CHARGE="charge";
-	public static final String BATTERY_DISCHARGE="discharge";
-	public static final String BATTERY_LEVEL="battery_level";
+	public static final String BATTERY_STATUS = "battery_status";
+	public static final String BATTERY_CHARGE_TIME = "battery_charge_time";
+	public static final String BATTERY_DISCHARGE_TIME = "battery_discharge_time";
+	public static final String BATTERY_CHARGE = "charge";
+	public static final String BATTERY_DISCHARGE = "discharge";
+	public static final String BATTERY_LEVEL = "battery_level";
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -57,8 +59,8 @@ public class WiFiService extends Service {
 	@Override
 	public final void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
-				.equals("true")) {
+		if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
+				"true")) {
 			clearProgress();
 		}
 	}
@@ -190,6 +192,7 @@ public class WiFiService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_SCREEN_ON)) {
+				screenStatus = false;
 				// 解锁
 				openNetwork();
 				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
@@ -198,6 +201,7 @@ public class WiFiService extends Service {
 				}
 
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+				screenStatus = true;
 				if (isHeadsetHold() || isBlueToothHold()) {
 					wifiStatus = 0;
 					mobileStatus = 0;
@@ -215,8 +219,17 @@ public class WiFiService extends Service {
 
 	private void closeNetwork() {
 		Log.i("close", "network is close");
-		new WiFiManagerOp(WiFiService.this).closeWifi();
-		MobileManagerOp.setMobileData(WiFiService.this, false);
+		try {
+			Thread.sleep(90 * 1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (screenStatus) {
+			Log.i("yayyayya","sfdsfsdf");
+			new WiFiManagerOp(WiFiService.this).closeWifi();
+			MobileManagerOp.setMobileData(WiFiService.this, false);
+		}
 	}
 
 	private void openNetwork() {
@@ -235,7 +248,7 @@ public class WiFiService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(getAPNType(this)==-1){
+		if (getAPNType(this) == -1) {
 			closeNetwork();
 		}
 	}
@@ -327,11 +340,13 @@ public class WiFiService extends Service {
 				int scale = intent.getIntExtra("scale", -1);
 				if (rawlevel >= 0 && scale > 0) {
 					battery_level = (rawlevel * 100) / scale;
-					Utils.setPreferenceStr(context, BATTERY_LEVEL,String.valueOf(battery_level));
+					Utils.setPreferenceStr(context, BATTERY_LEVEL,
+							String.valueOf(battery_level));
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-					Utils.setPreferenceStr(context, BATTERY_STATUS,BATTERY_CHARGE);
+					Utils.setPreferenceStr(context, BATTERY_STATUS,
+							BATTERY_CHARGE);
 					// 充电状态
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (isFirstCharge) {
@@ -340,13 +355,15 @@ public class WiFiService extends Service {
 							float stime = ((100 - battery_level) * 2000)
 									/ (500 * 100f);
 							stime = ((int) (stime * 10)) / 10f;
-							Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,stime+"");
+							Utils.setPreferenceStr(context,
+									BATTERY_CHARGE_TIME, stime + "");
 						} else if (plugeed == BatteryManager.BATTERY_PLUGGED_AC) {
 							// 电源充电 1000mA
 							float stime = ((100 - battery_level) * 2000)
 									/ (1000 * 100f);
 							stime = ((int) (stime * 10)) / 10f;
-							Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,stime+"");
+							Utils.setPreferenceStr(context,
+									BATTERY_CHARGE_TIME, stime + "");
 						}
 						isFirstCharge = false;
 						first_charge_battery_level = battery_level;
@@ -363,7 +380,8 @@ public class WiFiService extends Service {
 									float stime = (((100 - battery_level) / poor_level) * poor_time)
 											/ (1000 * 60 * 60f);
 									stime = ((int) (stime * 10)) / 10f;
-									Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,stime+"");
+									Utils.setPreferenceStr(context,
+											BATTERY_CHARGE_TIME, stime + "");
 									old_charge_battery_level = battery_level;
 									last_charge_time = System
 											.currentTimeMillis();
@@ -379,16 +397,18 @@ public class WiFiService extends Service {
 							return;
 						}
 					}
-					
+
 				}
 			} else {
 				// 放电状态
-				Utils.setPreferenceStr(context, BATTERY_STATUS,BATTERY_DISCHARGE);
+				Utils.setPreferenceStr(context, BATTERY_STATUS,
+						BATTERY_DISCHARGE);
 				if (isFirstDisCharge) {
 					// 放电100mA
 					float stime = (battery_level / 100f) * 2000 / 100f;
 					stime = ((int) (stime * 10)) / 10f;
-					Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,stime+"");
+					Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,
+							stime + "");
 					first_discharge_battery_level = battery_level;
 					isFirstDisCharge = false;
 				} else {
@@ -403,7 +423,8 @@ public class WiFiService extends Service {
 								float stime = ((battery_level / poor_level) * poor_time)
 										/ (1000 * 60 * 60f);
 								stime = ((int) (stime * 10)) / 10f;
-								Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,stime+"");
+								Utils.setPreferenceStr(context,
+										BATTERY_DISCHARGE_TIME, stime + "");
 								last_discharge_time = System
 										.currentTimeMillis();
 								old_discharge_battery_level = battery_level;

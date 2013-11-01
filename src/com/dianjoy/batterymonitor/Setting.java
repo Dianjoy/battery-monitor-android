@@ -9,9 +9,12 @@ import android.graphics.Typeface;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Setting extends Activity {
@@ -21,6 +24,7 @@ public class Setting extends Activity {
 	private TextView hours;
 	private TextView minutes;
 	private TextView status;
+	private LinearLayout linearLayot;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,17 @@ public class Setting extends Activity {
 		startIntentService.setClassName(this,
 				"com.dianjoy.batterymonitor.WiFiService");
 		startService(startIntentService);
+		linearLayot=(LinearLayout)findViewById(R.id.bestSetting);
+		linearLayot.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 Intent intentFilter=new Intent(Setting.this,BestSetting.class);
+	              startActivity(intentFilter);
+			}
+		});
+	
 		checkBoxGetInfo = (CheckBox) findViewById(R.id.getInfo);
 		checkBoxGetProgress = (CheckBox) findViewById(R.id.getProgressInfo);
 		textBat = (TextView) findViewById(R.id.battery);
@@ -44,8 +59,7 @@ public class Setting extends Activity {
 				.equals("true")) {
 			this.checkBoxGetProgress.setChecked(true);
 		}
-		Typeface fontFace = Typeface.createFromAsset(getAssets(),
-				"fonts/stxingka.ttf");
+		Typeface fontFace = Typeface.createFromAsset(getAssets(),"fonts/HelveticaNeueLTStd-Th.otf");
 		TextView text = (TextView) findViewById(R.id.battery);
 		text.setTypeface(fontFace);
 		IntentFilter intentFilter = new IntentFilter(
@@ -136,20 +150,20 @@ public class Setting extends Activity {
 								+ "M");
 
 					}
-					status.setText("当前状态:充电");
+					status.setText("充电中");
 				} else {
-					if(intent.getIntExtra("status", -1) == BatteryManager.BATTERY_STATUS_FULL){
-						status.setText("当前状态:充电完毕");
-					}else{
-						status.setText("当前状态:放电");
-					}
+//					if(intent.getIntExtra("status", -1) == BatteryManager.BATTERY_STATUS_FULL){
+//						status.setText("充电完毕");
+//					}else{
+						//status.setText("放电");
+					//}
 				
 					/*Log.i("dds", Utils.getPreferenceStr(Setting.this,
 									WiFiService.BATTERY_CHARGE_TIME, "0.0"));*/
 					if (Utils.getPreferenceStr(Setting.this,WiFiService.BATTERY_DISCHARGE_TIME,"").equals("")) {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;
-						hours.setText(String.valueOf((int) stime) + "H");
+						status.setText("可用"+String.valueOf((int) stime) + "小时");
 						minutes.setText(String.valueOf(
 								(stime - (int) stime) * 60).substring(
 								0,
@@ -160,7 +174,7 @@ public class Setting extends Activity {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
 								Setting.this, WiFiService.BATTERY_DISCHARGE_TIME,
 								"0"));
-						hours.setText(String.valueOf((int) timeTemp) + "H");
+						status.setText("可用"+String.valueOf((int) timeTemp) + "小时");
 						minutes.setText(String.valueOf(
 								(timeTemp - (int) timeTemp) * 60).substring(
 								0,
