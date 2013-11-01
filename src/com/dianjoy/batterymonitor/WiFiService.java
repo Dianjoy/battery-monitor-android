@@ -7,16 +7,20 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.BatteryManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -26,7 +30,23 @@ public class WiFiService extends Service {
 	private static int wifiStatus = 0;
 	private static int mobileStatus = 0;
 	private IntentFilter screenFilter;
-
+	private AudioManager audioManager;
+	private BluetoothAdapter bluetoothAdapter;
+	private IntentFilter batteryFilter;
+	private int battery_level;
+	private int first_charge_battery_level = -1;
+	private int old_charge_battery_level = -1;
+	private int first_discharge_battery_level = -1;
+	private int old_discharge_battery_level = -1;
+	private long last_charge_time;
+	private long last_discharge_time;
+	private boolean isFirstCharge = true;
+	private boolean isFirstDisCharge = true;
+	public static final String BATTERY_STATUS="battery_status";
+	public static final String BATTERY_CHARGE_TIME="battery_charge_time";
+	public static final String BATTERY_DISCHARGE_TIME="battery_discharge_time";
+	public static final String BATTERY_CHARGE="charge";
+	public static final String BATTERY_DISCHARGE="discharge";
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -48,14 +68,21 @@ public class WiFiService extends Service {
 	public final void onCreate() {
 		super.onCreate();
 		Log.i("tag", "service is create");
+		audioManager = (AudioManager) this
+				.getSystemService(Context.AUDIO_SERVICE);
+		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
 		screenFilter = new IntentFilter();
 		screenFilter.addAction(Intent.ACTION_SCREEN_ON);
 		screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		registerReceiver(screenReceiver, screenFilter);
-		registerReceiver(screenReceiver, screenFilter);
+
+		batteryFilter = new IntentFilter();
+		batteryFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+		registerReceiver(batteryReceiver, batteryFilter);
+
 		getAPNType(WiFiService.this);
-		if (Utils.getPreferenceStr(WiFiService.this, "getInfo").equals(
-				"true")) {
+		if (Utils.getPreferenceStr(WiFiService.this, "getInfo").equals("true")) {
 			monitor();
 		}
 	}
@@ -90,7 +117,7 @@ public class WiFiService extends Service {
 					}
 				}
 			}
-		},0, 15 * 60 * 1000l);
+		}, 0, 15 * 60 * 1000l);
 	}
 
 	/**
@@ -125,6 +152,8 @@ public class WiFiService extends Service {
 	 * @return
 	 */
 	private final int getAPNType(Context context) {
+		mobileStatus = 0;
+		wifiStatus = 0;
 		int CMNET = 3;
 		int CMWAP = 2;
 		int WIFI = 1;
@@ -159,19 +188,23 @@ public class WiFiService extends Service {
 			if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				// 解锁
 				openNetwork();
-				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
-						"true")) {
+				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
+						.equals("true")) {
 					clearProgress();
 				}
 
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-				// 锁屏
-				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
-						"true")) {
+				if (isHeadsetHold() || isBlueToothHold()) {
+					wifiStatus = 0;
+					mobileStatus = 0;
+					return;
+				}
+				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
+						.equals("true")) {
 					clearProgress();
 				}
-				closeNetwork();
 				getAPNType(WiFiService.this);
+				closeNetwork();
 			}
 		}
 	};
@@ -259,4 +292,121 @@ public class WiFiService extends Service {
 		}
 		return initial_memory / (1024 * 1024);
 	}
+
+	// 判断是否有耳机插入
+	public boolean isHeadsetHold() {
+		return audioManager.isWiredHeadsetOn();
+	}
+
+	// 判断蓝牙是否打开
+	public boolean isBlueToothHold() {
+		return bluetoothAdapter.isEnabled();
+	}
+
+	// 电池电量的监听广播
+	BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+				int rawlevel = intent.getIntExtra("level", -1);
+				int scale = intent.getIntExtra("scale", -1);
+				if (rawlevel >= 0 && scale > 0) {
+					battery_level = (rawlevel * 100) / scale;
+				}
+				int status = intent.getIntExtra("status", -1);
+				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+					Utils.setPreferenceStr(context, BATTERY_STATUS,BATTERY_CHARGE);
+					// 充电状态
+					int plugeed = intent.getIntExtra("plugged", -1);
+					if (isFirstCharge) {
+						if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
+							// USB充电 500mA
+							float stime = ((100 - battery_level) * 2000)
+									/ (500 * 100f);
+							stime = ((int) (stime * 10)) / 10f;
+							Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,stime+"");
+						} else if (plugeed == BatteryManager.BATTERY_PLUGGED_AC) {
+							// 电源充电 1000mA
+							float stime = ((100 - battery_level) * 2000)
+									/ (1000 * 100f);
+							stime = ((int) (stime * 10)) / 10f;
+							Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,stime+"");
+						}
+						isFirstCharge = false;
+						first_charge_battery_level = battery_level;
+					} else {
+						if (first_charge_battery_level < battery_level) {
+							if (battery_level - first_charge_battery_level > 1) {
+								if (old_charge_battery_level < battery_level) {
+									long current_time = System
+											.currentTimeMillis();
+									int poor_level = battery_level
+											- old_charge_battery_level;
+									long poor_time = current_time
+											- last_charge_time;
+									float stime = (((100 - battery_level) / poor_level) * poor_time)
+											/ (1000 * 60 * 60f);
+									stime = ((int) (stime * 10)) / 10f;
+									Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,stime+"");
+									old_charge_battery_level = battery_level;
+									last_charge_time = System
+											.currentTimeMillis();
+								} else {
+									return;
+								}
+							} else {
+								last_charge_time = System.currentTimeMillis();
+								old_charge_battery_level = battery_level;
+								return;
+							}
+						} else {
+							return;
+						}
+					}
+					
+				}
+			} else {
+				// 放电状态
+				Utils.setPreferenceStr(context, BATTERY_STATUS,BATTERY_DISCHARGE);
+				if (isFirstDisCharge) {
+					// 放电100mA
+					float stime = (battery_level / 100) * 2000 / 100f;
+					stime = ((int) (stime * 10)) / 10f;
+					Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,stime+"");
+					first_discharge_battery_level = battery_level;
+					isFirstDisCharge = false;
+				} else {
+					if (battery_level < first_discharge_battery_level) {
+						if (first_discharge_battery_level - battery_level > 1) {
+							if (battery_level < old_discharge_battery_level) {
+								long current_time = System.currentTimeMillis();
+								int poor_level = old_discharge_battery_level
+										- battery_level;
+								long poor_time = current_time
+										- last_discharge_time;
+								float stime = ((battery_level / poor_level) * poor_time)
+										/ (1000 * 60 * 60f);
+								stime = ((int) (stime * 10)) / 10f;
+								Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,stime+"");
+								last_discharge_time = System
+										.currentTimeMillis();
+								old_discharge_battery_level = battery_level;
+							} else {
+								return;
+							}
+						} else {
+							last_discharge_time = System.currentTimeMillis();
+							old_discharge_battery_level = battery_level;
+							return;
+						}
+					} else {
+						return;
+					}
+				}
+			}
+		}
+
+	};
 }
