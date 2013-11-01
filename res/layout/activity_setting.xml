@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Setting" >
+
+    <CheckBox
+        android:id="@+id/getInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="锁屏时允许接受消息" >
+    </CheckBox>
+
+    <CheckBox
+        android:id="@+id/getProgressInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="解锁屏时自动清理后台进程" >
+    </CheckBox>
+
+</LinearLayout>
