@@ -1,5 +1,7 @@
 package com.dianjoy.batterymonitor;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,24 +36,25 @@ public class Setting extends Activity {
 		startIntentService.setClassName(this,
 				"com.dianjoy.batterymonitor.WiFiService");
 		startService(startIntentService);
-		linearLayot=(LinearLayout)findViewById(R.id.bestSetting);
+		linearLayot = (LinearLayout) findViewById(R.id.bestSetting);
 		linearLayot.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				 Intent intentFilter=new Intent(Setting.this,BestSetting.class);
-	              startActivity(intentFilter);
+				Intent intentFilter = new Intent(Setting.this,
+						BestSetting.class);
+				startActivity(intentFilter);
 			}
 		});
-	
+
 		checkBoxGetInfo = (CheckBox) findViewById(R.id.getInfo);
 		checkBoxGetProgress = (CheckBox) findViewById(R.id.getProgressInfo);
 		textBat = (TextView) findViewById(R.id.battery);
 		hours = (TextView) findViewById(R.id.hours);
 		minutes = (TextView) findViewById(R.id.minutes);
 		textBat = (TextView) findViewById(R.id.battery);
-		status= (TextView) findViewById(R.id.status);
+		status = (TextView) findViewById(R.id.status);
 		if (Utils.getPreferenceStr(this, "getInfo", "false").equals("true")) {
 			this.checkBoxGetInfo.setChecked(true);
 		}
@@ -59,7 +62,8 @@ public class Setting extends Activity {
 				.equals("true")) {
 			this.checkBoxGetProgress.setChecked(true);
 		}
-		Typeface fontFace = Typeface.createFromAsset(getAssets(),"fonts/HelveticaNeueLTStd-Th.otf");
+		Typeface fontFace = Typeface.createFromAsset(getAssets(),
+				"fonts/HelveticaNeueLTStd-Th.otf");
 		TextView text = (TextView) findViewById(R.id.battery);
 		text.setTypeface(fontFace);
 		IntentFilter intentFilter = new IntentFilter(
@@ -106,6 +110,13 @@ public class Setting extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	/**
@@ -152,18 +163,23 @@ public class Setting extends Activity {
 					}
 					status.setText("充电中");
 				} else {
-//					if(intent.getIntExtra("status", -1) == BatteryManager.BATTERY_STATUS_FULL){
-//						status.setText("充电完毕");
-//					}else{
-						//status.setText("放电");
-					//}
-				
-					/*Log.i("dds", Utils.getPreferenceStr(Setting.this,
-									WiFiService.BATTERY_CHARGE_TIME, "0.0"));*/
-					if (Utils.getPreferenceStr(Setting.this,WiFiService.BATTERY_DISCHARGE_TIME,"").equals("")) {
+					// if(intent.getIntExtra("status", -1) ==
+					// BatteryManager.BATTERY_STATUS_FULL){
+					// status.setText("充电完毕");
+					// }else{
+					// status.setText("放电");
+					// }
+
+					/*
+					 * Log.i("dds", Utils.getPreferenceStr(Setting.this,
+					 * WiFiService.BATTERY_CHARGE_TIME, "0.0"));
+					 */
+					if (Utils.getPreferenceStr(Setting.this,
+							WiFiService.BATTERY_DISCHARGE_TIME, "").equals("")) {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;
-						status.setText("可用"+String.valueOf((int) stime) + "小时");
+						status.setText("可用" + String.valueOf((int) stime)
+								+ "小时");
 						minutes.setText(String.valueOf(
 								(stime - (int) stime) * 60).substring(
 								0,
@@ -172,14 +188,17 @@ public class Setting extends Activity {
 								+ "M");
 					} else {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
-								Setting.this, WiFiService.BATTERY_DISCHARGE_TIME,
-								"0"));
-						status.setText("可用"+String.valueOf((int) timeTemp) + "小时");
-						minutes.setText(String.valueOf(
-								(timeTemp - (int) timeTemp) * 60).substring(
-								0,
-								String.valueOf((timeTemp - (int) timeTemp) * 60)
-										.indexOf("."))
+								Setting.this,
+								WiFiService.BATTERY_DISCHARGE_TIME, "0"));
+						status.setText("可用" + String.valueOf((int) timeTemp)
+								+ "小时");
+						minutes.setText(String
+								.valueOf((timeTemp - (int) timeTemp) * 60)
+								.substring(
+										0,
+										String.valueOf(
+												(timeTemp - (int) timeTemp) * 60)
+												.indexOf("."))
 								+ "M");
 					}
 

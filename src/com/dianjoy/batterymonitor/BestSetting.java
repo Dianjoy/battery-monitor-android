@@ -1,5 +1,7 @@
 package com.dianjoy.batterymonitor;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -37,11 +39,13 @@ public class BestSetting extends Activity {
 							boolean isChecked) {
 						// TODO Auto-generated method stub
 						if (isChecked) {
+							MobclickAgent.onEvent(BestSetting.this,"screen_getinfo_on");
 							Utils.setPreferenceStr(BestSetting.this, "getInfo",
 									"true");
 						} else {
 							Utils.setPreferenceStr(BestSetting.this, "getInfo",
 									"false");
+							MobclickAgent.onEvent(BestSetting.this,"screen_getinfo_off");
 						}
 					}
 				});
@@ -54,13 +58,27 @@ public class BestSetting extends Activity {
 							boolean isChecked) {
 						// TODO Auto-generated method stub
 						if (isChecked) {
+							MobclickAgent.onEvent(BestSetting.this,"screen_clearn_progress_on");
 							Utils.setPreferenceStr(BestSetting.this,
 									"progressInfo", "true");
 						} else {
+							MobclickAgent.onEvent(BestSetting.this,"screen_clearn_progress_off");
 							Utils.setPreferenceStr(BestSetting.this,
 									"progressInfo", "false");
 						}
 					}
 				});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 }

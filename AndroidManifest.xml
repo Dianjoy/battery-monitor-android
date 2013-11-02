@@ -49,6 +49,8 @@
             android:name="com.dianjoy.batterymonitor.BestSetting"
            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
+        <meta-data android:value="5274a3e356240b905a23fe99" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>   
     </application>
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />

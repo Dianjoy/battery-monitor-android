@@ -219,17 +219,18 @@ public class WiFiService extends Service {
 
 	private void closeNetwork() {
 		Log.i("close", "network is close");
-		try {
-			Thread.sleep(90 * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (screenStatus) {
-			Log.i("yayyayya","sfdsfsdf");
-			new WiFiManagerOp(WiFiService.this).closeWifi();
-			MobileManagerOp.setMobileData(WiFiService.this, false);
-		}
+		new Timer().schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(screenStatus){
+					Log.i("yayyayya","sfdsfsdf");
+					new WiFiManagerOp(WiFiService.this).closeWifi();
+					MobileManagerOp.setMobileData(WiFiService.this, false);
+				}
+			}
+		}, 90*1000);
 	}
 
 	private void openNetwork() {
@@ -243,7 +244,7 @@ public class WiFiService extends Service {
 			MobileManagerOp.setMobileData(WiFiService.this, true);
 		}
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

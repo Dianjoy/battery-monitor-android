@@ -1,24 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".Setting" >
 
     <LinearLayout
+        android:id="@+id/rootBat"
+        android:layout_marginTop="150dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dip"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal" >
+        android:gravity="center"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/battery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="90sp"
-            android:textStyle="bold" />
+            android:textSize="70sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,9 +51,10 @@
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/rootBat"
         android:layout_marginTop="10dip"
         android:gravity="center_horizontal"
-        android:textSize="15sp" />
+        android:textSize="23sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -86,11 +86,11 @@
 
     <LinearLayout
         android:id="@+id/bestSetting"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginTop="240dip"
-        android:gravity="left|center_vertical" >
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dip"
+        android:gravity="center" >
 
         <ImageView
             android:layout_width="50dip"
@@ -98,10 +98,11 @@
             android:src="@drawable/gear" />
 
         <TextView
-            android:text="设置"
-              android:textSize="25sp" 
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:text="设置"
+            android:textSize="35sp" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
