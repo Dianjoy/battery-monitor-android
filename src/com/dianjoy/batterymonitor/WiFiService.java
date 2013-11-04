@@ -339,6 +339,7 @@ public class WiFiService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+			HashMap<String,String> map = new HashMap<String,String>();
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
 				int rawlevel = intent.getIntExtra("level", -1);
 				int scale = intent.getIntExtra("scale", -1);
@@ -346,15 +347,15 @@ public class WiFiService extends Service {
 					battery_level = (rawlevel * 100) / scale;
 					Utils.setPreferenceStr(context, BATTERY_LEVEL,
 							String.valueOf(battery_level));
-					HashMap<String,String> map = new HashMap<String,String>();
 					map.put("power",String.valueOf(battery_level));
-					MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
+					
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					Utils.setPreferenceStr(context, BATTERY_STATUS,
 							BATTERY_CHARGE);
 					// ³äµç×´Ì¬
+					map.put("status",String.valueOf(1));
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (isFirstCharge) {
 						if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
@@ -408,6 +409,7 @@ public class WiFiService extends Service {
 				}
 			} else {
 				// ·Åµç×´Ì¬
+				map.put("status",String.valueOf(0));
 				Utils.setPreferenceStr(context, BATTERY_STATUS,
 						BATTERY_DISCHARGE);
 				if (isFirstDisCharge) {
@@ -448,6 +450,7 @@ public class WiFiService extends Service {
 					}
 				}
 			}
+			MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
 		}
 
 	};
