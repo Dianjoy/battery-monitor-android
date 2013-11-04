@@ -133,7 +133,8 @@ public class Setting extends Activity {
 				int scale = intent.getIntExtra("scale", 100);
 				textBat.setText(((level * 100) / scale) + "%");
 				int battery_level = (level * 100) / scale;
-				if (intent.getIntExtra("status", -1) == BatteryManager.BATTERY_STATUS_CHARGING) {
+				int battery_status=intent.getIntExtra("status", -1);
+				if (battery_status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
 						// USB充电 500mA
@@ -162,18 +163,7 @@ public class Setting extends Activity {
 
 					}
 					status.setText("充电中");
-				} else {
-					// if(intent.getIntExtra("status", -1) ==
-					// BatteryManager.BATTERY_STATUS_FULL){
-					// status.setText("充电完毕");
-					// }else{
-					// status.setText("放电");
-					// }
-
-					/*
-					 * Log.i("dds", Utils.getPreferenceStr(Setting.this,
-					 * WiFiService.BATTERY_CHARGE_TIME, "0.0"));
-					 */
+				} else if(battery_status==BatteryManager.BATTERY_STATUS_DISCHARGING){
 					if (Utils.getPreferenceStr(Setting.this,
 							WiFiService.BATTERY_DISCHARGE_TIME, "").equals("")) {
 						float stime = (battery_level / 100f) * 2000 / 100f;
@@ -202,6 +192,8 @@ public class Setting extends Activity {
 								+ "M");
 					}
 
+				}else if(battery_status==BatteryManager.BATTERY_STATUS_FULL){
+					status.setText("充电完成");
 				}
 			}
 		}

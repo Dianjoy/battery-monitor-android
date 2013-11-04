@@ -52,6 +52,7 @@ public class WiFiService extends Service {
 	public static final String BATTERY_CHARGE = "charge";
 	public static final String BATTERY_DISCHARGE = "discharge";
 	public static final String BATTERY_LEVEL = "battery_level";
+	public static final String BATTERY_CHARGE_FULL = "charge_full";
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -62,6 +63,7 @@ public class WiFiService extends Service {
 	@Override
 	public final void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
+		Log.i("start", "service is restart");
 		if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
 				"true")) {
 			clearProgress();
@@ -71,6 +73,8 @@ public class WiFiService extends Service {
 	@Override
 	public final void onDestroy() {
 		super.onDestroy();
+		unregisterReceiver(screenReceiver);
+		unregisterReceiver(batteryReceiver);
 	}
 
 	@Override
@@ -223,17 +227,17 @@ public class WiFiService extends Service {
 	private void closeNetwork() {
 		Log.i("close", "network is close");
 		new Timer().schedule(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				if(screenStatus){
-					Log.i("yayyayya","sfdsfsdf");
+				if (screenStatus) {
+					Log.i("yayyayya", "sfdsfsdf");
 					new WiFiManagerOp(WiFiService.this).closeWifi();
 					MobileManagerOp.setMobileData(WiFiService.this, false);
 				}
 			}
-		}, 90*1000);
+		}, 90 * 1000);
 	}
 
 	private void openNetwork() {
@@ -339,7 +343,7 @@ public class WiFiService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			HashMap<String,String> map = new HashMap<String,String>();
+			HashMap<String, String> map = new HashMap<String, String>();
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
 				int rawlevel = intent.getIntExtra("level", -1);
 				int scale = intent.getIntExtra("scale", -1);
@@ -347,15 +351,14 @@ public class WiFiService extends Service {
 					battery_level = (rawlevel * 100) / scale;
 					Utils.setPreferenceStr(context, BATTERY_LEVEL,
 							String.valueOf(battery_level));
-					map.put("power",String.valueOf(battery_level));
-					
+					map.put("power", String.valueOf(battery_level));
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					Utils.setPreferenceStr(context, BATTERY_STATUS,
 							BATTERY_CHARGE);
 					// 充电状态
-					map.put("status",String.valueOf(1));
+					map.put("status", String.valueOf(1));
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (isFirstCharge) {
 						if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
@@ -406,52 +409,57 @@ public class WiFiService extends Service {
 						}
 					}
 
-				}
-			} else {
-				// 放电状态
-				map.put("status",String.valueOf(0));
-				Utils.setPreferenceStr(context, BATTERY_STATUS,
-						BATTERY_DISCHARGE);
-				if (isFirstDisCharge) {
-					// 放电100mA
-					float stime = (battery_level / 100f) * 2000 / 100f;
-					stime = ((int) (stime * 10)) / 10f;
-					Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,
-							stime + "");
-					first_discharge_battery_level = battery_level;
-					isFirstDisCharge = false;
-				} else {
-					if (battery_level < first_discharge_battery_level) {
-						if (first_discharge_battery_level - battery_level > 1) {
-							if (battery_level < old_discharge_battery_level) {
-								long current_time = System.currentTimeMillis();
-								int poor_level = old_discharge_battery_level
-										- battery_level;
-								long poor_time = current_time
-										- last_discharge_time;
-								float stime = ((battery_level / poor_level) * poor_time)
-										/ (1000 * 60 * 60f);
-								stime = ((int) (stime * 10)) / 10f;
-								Utils.setPreferenceStr(context,
-										BATTERY_DISCHARGE_TIME, stime + "");
+				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
+					// 放电状态
+					map.put("status", String.valueOf(1));
+					Utils.setPreferenceStr(context, BATTERY_STATUS,
+							BATTERY_DISCHARGE);
+					if (isFirstDisCharge) {
+						// 放电100mA
+						float stime = (battery_level / 100f) * 2000 / 100f;
+						stime = ((int) (stime * 10)) / 10f;
+						Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,
+								stime + "");
+						first_discharge_battery_level = battery_level;
+						isFirstDisCharge = false;
+					} else {
+						if (battery_level < first_discharge_battery_level) {
+							if (first_discharge_battery_level - battery_level > 1) {
+								if (battery_level < old_discharge_battery_level) {
+									long current_time = System
+											.currentTimeMillis();
+									int poor_level = old_discharge_battery_level
+											- battery_level;
+									long poor_time = current_time
+											- last_discharge_time;
+									float stime = ((battery_level / poor_level) * poor_time)
+											/ (1000 * 60 * 60f);
+									stime = ((int) (stime * 10)) / 10f;
+									Utils.setPreferenceStr(context,
+											BATTERY_DISCHARGE_TIME, stime + "");
+									last_discharge_time = System
+											.currentTimeMillis();
+									old_discharge_battery_level = battery_level;
+								} else {
+									return;
+								}
+							} else {
 								last_discharge_time = System
 										.currentTimeMillis();
 								old_discharge_battery_level = battery_level;
-							} else {
 								return;
 							}
 						} else {
-							last_discharge_time = System.currentTimeMillis();
-							old_discharge_battery_level = battery_level;
 							return;
 						}
-					} else {
-						return;
 					}
+				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
+					Utils.setPreferenceStr(context, BATTERY_STATUS,
+							BATTERY_CHARGE_FULL);
 				}
-			}
-			MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
-		}
 
+				MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
+			}
+		}
 	};
 }

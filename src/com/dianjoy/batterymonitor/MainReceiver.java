@@ -20,7 +20,7 @@ public class MainReceiver extends BroadcastReceiver {
 	 */
 	public void startService(Context context) {
 		Intent intent = new Intent();
-		intent.setClassName(context,"com.example.wifi_test.WiFiService");
+		intent.setClassName(context,"com.dianjoy.batterymonitor.WiFiService");
 		context.startService(intent);
 	}
 }
