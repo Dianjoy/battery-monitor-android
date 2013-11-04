@@ -411,7 +411,7 @@ public class WiFiService extends Service {
 
 				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
 					// 放电状态
-					map.put("status", String.valueOf(1));
+					map.put("status", String.valueOf(0));
 					Utils.setPreferenceStr(context, BATTERY_STATUS,
 							BATTERY_DISCHARGE);
 					if (isFirstDisCharge) {
@@ -456,6 +456,8 @@ public class WiFiService extends Service {
 				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
 					Utils.setPreferenceStr(context, BATTERY_STATUS,
 							BATTERY_CHARGE_FULL);
+					// 放电完毕
+					map.put("status", String.valueOf(2));
 				}
 
 				MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
