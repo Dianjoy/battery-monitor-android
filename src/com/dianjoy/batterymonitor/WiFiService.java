@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -343,6 +346,9 @@ public class WiFiService extends Service {
 					battery_level = (rawlevel * 100) / scale;
 					Utils.setPreferenceStr(context, BATTERY_LEVEL,
 							String.valueOf(battery_level));
+					HashMap<String,String> map = new HashMap<String,String>();
+					map.put("power",String.valueOf(battery_level));
+					MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
