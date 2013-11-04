@@ -26,6 +26,7 @@ import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class WiFiService extends Service {
@@ -343,7 +344,9 @@ public class WiFiService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+			TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("deviceid",tm.getDeviceId()+"");
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
 				int rawlevel = intent.getIntExtra("level", -1);
 				int scale = intent.getIntExtra("scale", -1);
