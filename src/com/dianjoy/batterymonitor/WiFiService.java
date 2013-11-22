@@ -219,8 +219,10 @@ public class WiFiService extends Service {
 						.equals("true")) {
 					clearProgress();
 				}
-				getAPNType(WiFiService.this);
-				closeNetwork();
+				if (Utils.getPreferenceStr(context, BATTERY_STATUS, BATTERY_DISCHARGE).equals(BATTERY_DISCHARGE)) {//充电时不进入省电程序
+					getAPNType(WiFiService.this);
+					closeNetwork();
+				} //yan.gao
 			}
 		}
 	};

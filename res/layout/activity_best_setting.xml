@@ -29,5 +29,13 @@
         android:layout_marginLeft="45dip"
         android:text=" 解锁屏时自动清理后台进程" >
     </CheckBox>
-
+	 <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="20dip"
+        android:text="白名单设置"
+        android:textSize="25sp"
+        android:clickable="true"
+        android:onClick="settingWhiteList" />
 </LinearLayout>

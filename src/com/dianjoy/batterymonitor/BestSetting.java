@@ -81,4 +81,8 @@ public class BestSetting extends Activity {
 		super.onPause();
 		MobclickAgent.onPause(this);
 	}
+	public void settingWhiteList(View v) {
+		Intent intent = new Intent(this, WhiteList.class);
+		startActivity(intent);
+	}
 }
