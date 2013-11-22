@@ -133,7 +133,7 @@ public class Setting extends Activity {
 				int scale = intent.getIntExtra("scale", 100);
 				textBat.setText(((level * 100) / scale) + "%");
 				int battery_level = (level * 100) / scale;
-				int battery_status=intent.getIntExtra("status", -1);
+				int battery_status = intent.getIntExtra("status", -1);
 				if (battery_status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
@@ -163,19 +163,24 @@ public class Setting extends Activity {
 
 					}
 					status.setText("充电中");
-				} else if(battery_status==BatteryManager.BATTERY_STATUS_DISCHARGING){
+				} else if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
 					if (Utils.getPreferenceStr(Setting.this,
 							WiFiService.BATTERY_DISCHARGE_TIME, "").equals("")) {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;
-						status.setText("可用" + String.valueOf((int) stime)
-								+ "小时");
-						minutes.setText(String.valueOf(
-								(stime - (int) stime) * 60).substring(
-								0,
-								String.valueOf((stime - (int) stime) * 60)
-										.indexOf("."))
-								+ "M");
+						if (String.valueOf((int) stime).equals("0")) {
+							status.setText("可用"
+									+ String.valueOf((stime - (int) stime) * 60)
+											.substring(
+													0,
+													String.valueOf(
+															(stime - (int) stime) * 60)
+															.indexOf("."))
+									+ "分钟");
+						} else {
+							status.setText("可用" + String.valueOf((int) stime)
+									+ "小时");
+						}
 					} else {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
 								Setting.this,
@@ -192,7 +197,7 @@ public class Setting extends Activity {
 								+ "M");
 					}
 
-				}else if(battery_status==BatteryManager.BATTERY_STATUS_FULL){
+				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
 					status.setText("充电完成");
 				}
 			}
