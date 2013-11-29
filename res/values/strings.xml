@@ -8,4 +8,5 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_best_setting">BestSetting</string>
 	<string name="title_white_list">白名单设置</string>
+	<string name="title_count">耗电统计</string>
 </resources>

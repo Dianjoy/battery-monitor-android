@@ -1,9 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BestSetting" >
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,4 +42,22 @@
         android:textSize="25sp"
         android:clickable="true"
         android:onClick="settingWhiteList" />
-</LinearLayout>
+	 </LinearLayout>
+	 <LinearLayout 
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentBottom="true"
+	     android:layout_alignParentRight="true"
+	     android:layout_margin="10dp"
+	     android:orientation="vertical">
+	     <ImageView 
+	         android:layout_width="35dp"
+	         android:layout_height="35dp"
+	         android:src="@drawable/feedback"/>
+	     <TextView 
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:text="反馈"
+	         android:textSize="18sp"/>
+	 </LinearLayout>"
+</RelativeLayout>

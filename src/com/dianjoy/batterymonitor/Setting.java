@@ -27,6 +27,7 @@ public class Setting extends Activity {
 	private TextView minutes;
 	private TextView status;
 	private LinearLayout linearLayot;
+	private LinearLayout count;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class Setting extends Activity {
 				"com.dianjoy.batterymonitor.WiFiService");
 		startService(startIntentService);
 		linearLayot = (LinearLayout) findViewById(R.id.bestSetting);
+		count = (LinearLayout)findViewById(R.id.count);
 		linearLayot.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -47,7 +49,14 @@ public class Setting extends Activity {
 				startActivity(intentFilter);
 			}
 		});
-
+        count.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		Intent intent = new Intent(Setting.this,ChartActivity.class);
+        		startActivity(intent);
+        		
+        	}
+        });
 		checkBoxGetInfo = (CheckBox) findViewById(R.id.getInfo);
 		checkBoxGetProgress = (CheckBox) findViewById(R.id.getProgressInfo);
 		textBat = (TextView) findViewById(R.id.battery);

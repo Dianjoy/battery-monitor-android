@@ -55,6 +55,9 @@
             android:name="com.dianjoy.batterymonitor.WhiteList"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
+        <activity 
+            android:name=".ChartActivity"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
         <meta-data android:value="5274a3e356240b905a23fe99" android:name="UMENG_APPKEY"></meta-data>
         <meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>   
     </application>
