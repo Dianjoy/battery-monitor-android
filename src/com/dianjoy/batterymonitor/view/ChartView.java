@@ -16,7 +16,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 
-import com.dianjoy.batterymonitor.Utils;
+import com.dianjoy.batterymonitor.tools.Utils;
 
 public class ChartView {
 	private Context context;

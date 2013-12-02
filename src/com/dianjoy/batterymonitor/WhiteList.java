@@ -3,6 +3,9 @@ package com.dianjoy.batterymonitor;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dianjoy.batterymonitor.tools.AppInfo;
+import com.dianjoy.batterymonitor.tools.Utils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -27,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class WhiteList extends Activity {
+public class WhiteList extends UmentActivity {
 	private ListView appInfo;
 	private ArrayList<AppInfo> listItem;
 	private Context context;

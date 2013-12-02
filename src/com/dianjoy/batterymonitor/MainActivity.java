@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.app.Activity;
 import android.content.Intent;
 
-public class MainActivity extends Activity {
+public class MainActivity extends UmentActivity {
 	private Button btnSetting;
 
 	@Override
@@ -37,8 +37,5 @@ public class MainActivity extends Activity {
 
 	}
 
-	@Override
-	protected final void onResume() {
-		super.onResume();
-	}
+
 }

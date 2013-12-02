@@ -1,21 +1,20 @@
 package com.dianjoy.batterymonitor;
 
-import com.umeng.analytics.MobclickAgent;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
+import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.dianjoy.batterymonitor.tools.Utils;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
 public class BestSetting extends Activity {
 	private CheckBox checkBoxGetInfo;
 	private CheckBox checkBoxGetProgress;
+	private FeedbackAgent agent;// = new FeedbackAgent(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +67,8 @@ public class BestSetting extends Activity {
 						}
 					}
 				});
+		agent = new FeedbackAgent(this);
+		agent.sync();
 	}
 
 	@Override
@@ -84,5 +85,8 @@ public class BestSetting extends Activity {
 	public void settingWhiteList(View v) {
 		Intent intent = new Intent(this, WhiteList.class);
 		startActivity(intent);
+	}
+	public void feedBack(View v) {
+	    agent.startFeedbackActivity();
 	}
 }

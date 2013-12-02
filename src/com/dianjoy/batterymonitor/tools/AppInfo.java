@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.dianjoy.batterymonitor.tools;
 
 import android.graphics.drawable.Drawable;
 

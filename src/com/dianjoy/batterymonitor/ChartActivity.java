@@ -11,7 +11,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.dianjoy.batterymonitor.view.ChartView;
 
-public class ChartActivity extends Activity {
+public class ChartActivity extends UmentActivity {
 	private LinearLayout batteryCount;
 	@Override 
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class ChartActivity extends Activity {
 		ChartView chartView = new ChartView(this);
 		GraphicalView chart = chartView.getData();
 		chart.setBackgroundColor(0x88222222);
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 400);
 		params.topMargin = 30;
 		params.leftMargin = 30;
 		params.rightMargin = 30;

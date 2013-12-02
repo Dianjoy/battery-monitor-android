@@ -1,5 +1,6 @@
 package com.dianjoy.batterymonitor;
 
+import com.dianjoy.batterymonitor.tools.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -127,7 +128,9 @@ public class Setting extends Activity {
 		super.onPause();
 		MobclickAgent.onPause(this);
 	}
-
+	public void getBatteryMessage() {
+		
+	}
 	/**
 	 * 广播接受者
 	 */
@@ -138,6 +141,7 @@ public class Setting extends Activity {
 			if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
 				// 获取当前电量
 				int level = intent.getIntExtra("level", 0);
+				Log.i("battery", level + " battery level");
 				// 电量的总刻度
 				int scale = intent.getIntExtra("scale", 100);
 				textBat.setText(((level * 100) / scale) + "%");

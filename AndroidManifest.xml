@@ -56,9 +56,15 @@
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity 
+            android:name="com.umeng.fb.ConversationActivity"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+		<activity 
+		    android:name="com.umeng.fb.ContactActivity"
+		    android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity 
             android:name=".ChartActivity"
             android:theme="@android:style/Theme.NoTitleBar"></activity>
-        <meta-data android:value="5274a3e356240b905a23fe99" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="52985a6956240b5736012bfa" android:name="UMENG_APPKEY"></meta-data>
         <meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>   
     </application>
 

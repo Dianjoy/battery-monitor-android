@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.dianjoy.batterymonitor.tools;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,5 +22,17 @@ public class Utils {
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putString(name, value);
 		editor.commit();
+	}
+	public static void setPreferenceStr(Context context, String name, String value, String preName) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				preName, 0);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putString(name, value);
+		editor.commit();
+	}
+	public static String getPreferenceStr(Context context, String name, String preName, String defValue) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				preName, 0);
+		return preferences.getString(name, defValue);
 	}
 }

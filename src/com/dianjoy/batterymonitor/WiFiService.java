@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.umeng.analytics.MobclickAgent;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -28,6 +26,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.dianjoy.batterymonitor.tools.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 public class WiFiService extends Service {
 	private boolean screenStatus = false;
@@ -54,6 +55,12 @@ public class WiFiService extends Service {
 	public static final String BATTERY_DISCHARGE = "discharge";
 	public static final String BATTERY_LEVEL = "battery_level";
 	public static final String BATTERY_CHARGE_FULL = "charge_full";
+	public static final String BATTERY_PRE = "battery_message";
+	public static final String BATTERY_COUNT = "battery_count";       //耗电量的取点数目
+	public static final String BATTERY_TIME = "battery_time";
+	public static final String BATTERY_STATUSES = "battery_status";
+	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin";  //起点
+	public static final int MAX_COUNT = 9;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -64,7 +71,7 @@ public class WiFiService extends Service {
 	@Override
 	public final void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		Log.i("start", "service is restart");
+		Log.i("tag", "service is restart");
 		if (Utils.getPreferenceStr(WiFiService.this, "progressInfo").equals(
 				"true")) {
 			clearProgress();
@@ -74,6 +81,7 @@ public class WiFiService extends Service {
 	@Override
 	public final void onDestroy() {
 		super.onDestroy();
+		Log.i("tag", "service is destory");
 		unregisterReceiver(screenReceiver);
 		unregisterReceiver(batteryReceiver);
 	}
@@ -99,8 +107,24 @@ public class WiFiService extends Service {
 		if (Utils.getPreferenceStr(WiFiService.this, "getInfo").equals("true")) {
 			monitor();
 		}
+		getBatteryMessage();
 	}
+	private void getBatteryMessage() {
+		new Timer().schedule(new TimerTask() {
 
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				batteryFilter = new IntentFilter();
+				batteryFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+				registerReceiver(batteryReceiver, batteryFilter);
+				unregisterReceiver(batteryReceiver);
+
+				
+			}
+			
+		},0, 10 *1000l);
+	}
 	private void monitor() {
 		new Timer().schedule(new TimerTask() {
 
@@ -339,7 +363,6 @@ public class WiFiService extends Service {
 	public boolean isBlueToothHold() {
 		return bluetoothAdapter.isEnabled();
 	}
-
 	// 电池电量的监听广播
 	BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
 
@@ -347,23 +370,33 @@ public class WiFiService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("deviceid",tm.getDeviceId()+"");
+			//HashMap<String, String> map = new HashMap<String, String>();
+			//map.put("deviceid",tm.getDeviceId()+"");
+			int count = Integer.valueOf(Utils.getPreferenceStr(context, BATTERY_COUNT, BATTERY_PRE, "0"));
+			int begin = Integer.valueOf(Utils.getPreferenceStr(context, BATTERY_COUNT_BEGIN, BATTERY_PRE, "0"));
+			int loc = 0;
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
 				int rawlevel = intent.getIntExtra("level", -1);
 				int scale = intent.getIntExtra("scale", -1);
 				if (rawlevel >= 0 && scale > 0) {
 					battery_level = (rawlevel * 100) / scale;
-					Utils.setPreferenceStr(context, BATTERY_LEVEL,
-							String.valueOf(battery_level));
-					map.put("power", String.valueOf(battery_level));
+					loc = (begin + count) % MAX_COUNT;
+					Utils.setPreferenceStr(context, BATTERY_LEVEL + loc, battery_level+"", BATTERY_PRE);
+					Utils.setPreferenceStr(context, BATTERY_TIME + loc, System.currentTimeMillis()+"", BATTERY_PRE);
+					if (count + 1 > MAX_COUNT) {
+						begin = (begin  + 1) % MAX_COUNT;
+						count = MAX_COUNT;
+					}else{
+						count ++;
+					}
+					Utils.setPreferenceStr(context, BATTERY_COUNT_BEGIN, begin +"", BATTERY_PRE);
+					Utils.setPreferenceStr(context, BATTERY_COUNT,  count +"", BATTERY_PRE);
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-					Utils.setPreferenceStr(context, BATTERY_STATUS,
-							BATTERY_CHARGE);
-					// 充电状态
-					map.put("status", String.valueOf(1));
+					Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
+							BATTERY_CHARGE, BATTERY_PRE);
+					/*// 充电状态
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (isFirstCharge) {
 						if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
@@ -413,11 +446,13 @@ public class WiFiService extends Service {
 							return;
 						}
 					}
-
+*/
 				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
 					// 放电状态
-					map.put("status", String.valueOf(0));
-					Utils.setPreferenceStr(context, BATTERY_STATUS,
+					//map.put("status", String.valueOf(0));
+					Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
+							BATTERY_DISCHARGE, BATTERY_PRE);
+					/*Utils.setPreferenceStr(context, BATTERY_STATUS,
 							BATTERY_DISCHARGE);
 					if (isFirstDisCharge) {
 						// 放电100mA
@@ -457,15 +492,17 @@ public class WiFiService extends Service {
 						} else {
 							return;
 						}
-					}
+					}*/
 				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
-					Utils.setPreferenceStr(context, BATTERY_STATUS,
-							BATTERY_CHARGE_FULL);
+					Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
+							BATTERY_CHARGE_FULL, BATTERY_PRE);
+					/*Utils.setPreferenceStr(context, BATTERY_STATUS,
+							BATTERY_CHARGE_FULL);*/
 					// 放电完毕
-					map.put("status", String.valueOf(2));
+					//map.put("status", String.valueOf(2));
 				}
 
-				MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
+				//MobclickAgent.onEvent(WiFiService.this, "battery_power", map);
 			}
 		}
 	};
