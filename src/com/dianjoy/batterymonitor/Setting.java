@@ -1,7 +1,6 @@
 package com.dianjoy.batterymonitor;
 
-import com.dianjoy.batterymonitor.tools.Utils;
-import com.umeng.analytics.MobclickAgent;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -20,6 +19,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dianjoy.batterymonitor.tools.Cons;
+import com.dianjoy.batterymonitor.tools.Utils;
+import com.umeng.analytics.MobclickAgent;
+
 public class Setting extends Activity {
 	private CheckBox checkBoxGetInfo;
 	private CheckBox checkBoxGetProgress;
@@ -29,6 +32,7 @@ public class Setting extends Activity {
 	private TextView status;
 	private LinearLayout linearLayot;
 	private LinearLayout count;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +119,7 @@ public class Setting extends Activity {
 						}
 					}
 				});
+		context = this;
 	}
 
 	@Override
@@ -128,7 +133,43 @@ public class Setting extends Activity {
 		super.onPause();
 		MobclickAgent.onPause(this);
 	}
-	public void getBatteryMessage() {
+	public boolean checkStatus(String s, int l, long t) {
+		if (s.equals(Cons.BATTERY_DISCHARGE) && t != 0 && l != 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public double getBatteryMessage() {
+		int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
+		int begin = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT_BEGIN, Cons.BATTERY_PRE, "0"));
+		String preStatus = Cons.BATTERY_CHARGE;
+		long preTime = 0;
+		int preLevel = 0;
+		Vector<Double> values = new Vector<Double>();
+		for (int i = begin; i < count; i ++) {
+			int offset = (begin + i) % Cons.MAX_COUNT;
+			String status = Utils.getPreferenceStr(context, Cons.BATTERY_STATUSES + offset, Cons.BATTERY_PRE, Cons.BATTERY_DISCHARGE);
+			long time = Long.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_TIME + offset, Cons.BATTERY_PRE, "0"));
+			int level = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_LEVEL + offset, Cons.BATTERY_PRE, "0"));
+			if (checkStatus(preStatus, preLevel, preTime) && checkStatus(status, level, time)) {
+				
+				double value = (double)(level - preLevel) /(time - preTime); //?考虑关机的情况，这个点要不要去掉
+				if(time - preTime  < 15 * 1000l * 60 * 2)
+					values.add(value);
+			}
+			if (checkStatus(status, level, time)){
+				preStatus = status;
+				preLevel = level;
+				preTime = time;
+			}
+		}
+		double averageLevel = 0;
+		for(int i = 0; i < values.size(); i ++) {
+			averageLevel += values.get(i);
+		}
+		averageLevel /= values.size();
+		return averageLevel;
 		
 	}
 	/**
@@ -177,7 +218,19 @@ public class Setting extends Activity {
 					}
 					status.setText("充电中");
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-					if (Utils.getPreferenceStr(Setting.this,
+					double averageLevel = getBatteryMessage();
+					if (averageLevel < 0) {
+						 int minute = (int)(-battery_level / averageLevel /(1000l * 60));
+						 int hour = minute / 60;
+						 String text;
+						 if (hour == 0) {
+							 text = "可用" + minute + "分钟";
+						 }else {
+							 text = "可用" + hour + "小时" + minute + "分钟";
+						 }
+						 status.setText(text);
+					}
+					else if (Utils.getPreferenceStr(Setting.this,
 							WiFiService.BATTERY_DISCHARGE_TIME, "").equals("")) {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;

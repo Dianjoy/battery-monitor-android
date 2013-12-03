@@ -1,7 +1,9 @@
 package com.dianjoy.batterymonitor.view;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -13,9 +15,10 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.Paint.Align;
+import android.graphics.Typeface;
 
+import com.dianjoy.batterymonitor.tools.Cons;
 import com.dianjoy.batterymonitor.tools.Utils;
 
 public class ChartView {
@@ -54,9 +57,6 @@ public class ChartView {
 	    renderer.setLabelsColor(labelsColor);
 	  }
 	  public GraphicalView getData() {
-		  String[] times = Utils.getPreferenceStr(context, "batteryTime").split("\t");
-		  String[] counts = Utils.getPreferenceStr(context, "batteryCount").split("\t");
-		  int number = Math.min(times.length, counts.length);
 		 // double[] x = new double[number];
 		 // double[] y = new double[number];
 		  /*for(int i = 0; i < number; i ++) {
@@ -64,8 +64,34 @@ public class ChartView {
 			  y[i] = Double.valueOf(counts[i]);
 			  
 		  }*/
-		  double[] x = {1, 2, 3, 5, 6,7,8,10,11,23};
-		  double[] y = {100, 90, 80 , 40, 60, 70, 86, 23, 45, 10};
+		  int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
+		  int begin = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT_BEGIN, Cons.BATTERY_PRE, "0"));
+		  String preStatus = Cons.BATTERY_CHARGE;
+		  long preTime = 0;
+		  int preLevel = 0;
+		  Vector<Double> times = new Vector<Double>();
+		  Vector<Double> levels = new Vector<Double>();
+		  long current = System.currentTimeMillis();
+		  DecimalFormat df=new DecimalFormat(".##");
+		  for (int i = 0; i < count; i ++) {
+			  int offset = (begin + i) % Cons.MAX_COUNT;
+			  String status = Utils.getPreferenceStr(context, Cons.BATTERY_STATUSES + offset, Cons.BATTERY_PRE, Cons.BATTERY_DISCHARGE);
+			  long time = Long.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_TIME + offset, Cons.BATTERY_PRE, "0"));
+			  int level = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_LEVEL + offset, Cons.BATTERY_PRE, "0"));
+			  if (time != 0 && level != 0) {
+				  double perids = (time - current)/((double)1000 * 60 * 60);
+				  times.add(Double.valueOf(df.format(perids)));
+				  levels.add((double)level);
+			  }
+		  }
+		  double[] x = new double[times.size()];
+		  double[] y = new double[times.size()];
+		  for(int i = 0 ; i < times.size(); i ++) {
+			  x[i] = times.get(i);
+			  y[i] = levels.get(i);
+		  }
+		//  double[] x = {1, 2, 3, 5, 6,7,8,10,11,23};
+		//  double[] y = {100, 90, 80 , 40, 60, 70, 86, 23, 45, 10};
 		  xData.add(x);
 		  yData.add(y);
 		  String[] titles = {"battery"};
@@ -76,7 +102,7 @@ public class ChartView {
 			  ((XYSeriesRenderer)renderer.getSeriesRendererAt(i)).setFillPoints(true);
 			  
 		  }
-		  setChartSettings(renderer, "Battery", "Time", "Battery data", 0, 24, 0, 100, Color.LTGRAY, Color.LTGRAY);
+		  setChartSettings(renderer, "Battery", "Time", "Battery data", x[0], 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
 		  renderer.setXLabels(12);
 		  renderer.setYLabels(10);
 		  renderer.setShowGrid(true);

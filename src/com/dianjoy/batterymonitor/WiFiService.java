@@ -123,7 +123,7 @@ public class WiFiService extends Service {
 				
 			}
 			
-		},0, 10 *1000l);
+		},0, 5* 60 *1000l);
 	}
 	private void monitor() {
 		new Timer().schedule(new TimerTask() {
