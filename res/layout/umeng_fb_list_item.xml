@@ -47,18 +47,18 @@
         android:background="#44444444"
         android:layout_below="@id/umeng_fb_list_reply_header" >
 
-        <TextView
+        <Button
             android:id="@+id/umeng_fb_reply_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/umeng_fb_reply_right_bg"
-            android:maxWidth="200dp"
-            android:text="@string/umeng_fb_reply_content_default"
-            android:textColor="#dddddd"
+            android:maxWidth="300dp"
+            android:textColor="#222222"
             android:textIsSelectable="true"
-            android:textSize="15sp" />
+            android:gravity="center_vertical"
+            android:textSize="13sp" />
     </RelativeLayout>
 
 </RelativeLayout>

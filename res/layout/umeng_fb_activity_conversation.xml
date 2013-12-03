@@ -10,16 +10,17 @@
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:layout_alignParentTop="true"
-        android:background="#000000" >
+        android:background="#222222" >
 
-        <Button
+        <ImageButton
             android:id="@+id/umeng_fb_back"
-            android:layout_width="wrap_content"
+            android:layout_width="67dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/umeng_fb_btn_bg_selector"
+            android:background="@drawable/title_btn_back"
+            android:src="@drawable/title_back"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -92,7 +93,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="#000000"
+            android:background="#222222"
             android:padding="5dp" >
 
             <Button
@@ -101,13 +102,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/umeng_fb_btn_bg_selector"
+                android:background="@drawable/btn_style"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="5dp"
                 android:text="@string/umeng_fb_send"
-                android:textColor="#ffffff" />
+                android:textColor="#222222" />
 
             <EditText
                 android:id="@+id/umeng_fb_reply_content"
@@ -115,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/umeng_fb_send"
-                android:background="#ffffff"
+                android:background="@drawable/editbox"
                 android:hint="@string/umeng_fb_reply_content_hint"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"

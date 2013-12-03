@@ -60,7 +60,7 @@ public class WiFiService extends Service {
 	public static final String BATTERY_TIME = "battery_time";
 	public static final String BATTERY_STATUSES = "battery_status";
 	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin";  //Æðµã
-	public static final int MAX_COUNT = 9;
+	public static final int MAX_COUNT = 96;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -123,7 +123,7 @@ public class WiFiService extends Service {
 				
 			}
 			
-		},0, 5* 60 *1000l);
+		},0, 15* 60 *1000l);
 	}
 	private void monitor() {
 		new Timer().schedule(new TimerTask() {

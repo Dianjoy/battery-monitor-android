@@ -226,7 +226,7 @@ public class Setting extends Activity {
 						 if (hour == 0) {
 							 text = "可用" + minute + "分钟";
 						 }else {
-							 text = "可用" + hour + "小时" + minute + "分钟";
+							 text = "可用" + hour + "小时" + minute % 60 + "分钟";
 						 }
 						 status.setText(text);
 					}

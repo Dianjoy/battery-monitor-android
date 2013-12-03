@@ -66,9 +66,6 @@ public class ChartView {
 		  }*/
 		  int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
 		  int begin = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT_BEGIN, Cons.BATTERY_PRE, "0"));
-		  String preStatus = Cons.BATTERY_CHARGE;
-		  long preTime = 0;
-		  int preLevel = 0;
 		  Vector<Double> times = new Vector<Double>();
 		  Vector<Double> levels = new Vector<Double>();
 		  long current = System.currentTimeMillis();
@@ -83,6 +80,10 @@ public class ChartView {
 				  times.add(Double.valueOf(df.format(perids)));
 				  levels.add((double)level);
 			  }
+		  }
+		  if(times.size() == 0) {
+			  times.add(-1.0);
+			  levels.add(55.0);
 		  }
 		  double[] x = new double[times.size()];
 		  double[] y = new double[times.size()];
