@@ -14,6 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		tableName = table;
 		rows = kind;
 	}
+	//default constructor.
 	public DBHelper (Context c, String table) {
 	    super(c,DB_NAME, null, VERSION);
 	    tableName = table;
