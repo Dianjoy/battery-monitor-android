@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + 
-				"(_id INTEGER PRIMARY KEY AUTOINCREMENT, " + rows + ")");
+				"(" + rows + ")");
 	}
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

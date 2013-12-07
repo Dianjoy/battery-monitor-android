@@ -19,7 +19,7 @@ public class DBManager {
 	}
 	public void add(int level, long time, String status) {
 		db.beginTransaction();
-		db.execSQL("INSERT INTO " + tableName +" VALUES(null, ?, ? , ?)", new Object[] {
+		db.execSQL("INSERT INTO " + tableName +" VALUES(?, ? , ?)", new Object[] {
 			time, level, status
 		});
 		db.setTransactionSuccessful();
@@ -33,7 +33,9 @@ public class DBManager {
 		Cursor c = db.query(tableName,null,null,null,null,null,null);
 		int count = c.getCount() - Cons.MAX_COUNT - 1;
 		if (count >= 0) {
-			delete(count);
+			db.execSQL("DELETE FROM " + tableName + " where " + Cons.BATTERY_TIME + " in ("
+					+ " select " + Cons.BATTERY_TIME + " from " + tableName + " order by " + Cons.BATTERY_TIME
+					 + " limit " + count + ")"); 
 		}
 		c.close();
 	}

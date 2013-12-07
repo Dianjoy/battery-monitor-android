@@ -101,7 +101,7 @@ public class ChartView {
 		  y = new double[l.length];
 		  long current = System.currentTimeMillis();
 		  for(int i = 0; i < t.length; i ++) {
-			  x[i] = (double)(t[i] - current)/ (1000 * 3600 * 24);
+			  x[i] = (double)(t[i] - current)/ (1000 * 3600);
 			  y[i] = l[i];
 		  }
 		  xData.add(x);
