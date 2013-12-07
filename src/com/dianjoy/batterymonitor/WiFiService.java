@@ -61,7 +61,7 @@ public class WiFiService extends Service {
 	public static final String BATTERY_STATUSES = "battery_status";
 	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin"; // 
 	public static final int MAX_COUNT = 96;
-	private DBManager db;
+	private Context context;
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -102,7 +102,8 @@ public class WiFiService extends Service {
 		batteryFilter = new IntentFilter();
 		batteryFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, batteryFilter);
-		db = new DBManager(this, "battery_message");
+		//db = new DBManager(this, "battery_message");
+		context = this;
 		getAPNType(WiFiService.this);
 		monitor();
 		getBatteryMessage();
@@ -121,7 +122,7 @@ public class WiFiService extends Service {
 
 			}
 
-		}, 0, 15 * 60 * 1000l);
+		}, 0, 1 * 60 * 1000l);
 	}
 
 	private void monitor() {
@@ -384,6 +385,7 @@ public class WiFiService extends Service {
 					BATTERY_COUNT_BEGIN, BATTERY_PRE, "0"));
 			int loc = 0;*/
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+				DBManager db = new DBManager(context, "battery_message");
 				int rawlevel = intent.getIntExtra("level", -1);
 				int scale = intent.getIntExtra("scale", -1);
 				if (rawlevel >= 0 && scale > 0) {
@@ -483,7 +485,7 @@ public class WiFiService extends Service {
 					// map.put("status", String.valueOf(2));
 				}
 				db.autoDelete();
-
+				db.closeDB();
 				// MobclickAgent.onEvent(WiFiService.this, "battery_power",
 				// map);
 			}

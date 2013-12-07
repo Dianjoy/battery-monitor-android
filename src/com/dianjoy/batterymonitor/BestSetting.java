@@ -1,5 +1,7 @@
 package com.dianjoy.batterymonitor;
 
+import org.achartengine.GraphicalView;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +9,11 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.dianjoy.batterymonitor.tools.Utils;
+import com.dianjoy.batterymonitor.view.ChartView;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 public class BestSetting extends Activity {
@@ -69,6 +74,7 @@ public class BestSetting extends Activity {
 				});
 		agent = new FeedbackAgent(this);
 		agent.sync();
+		this.createGraphicalView();
 	}
 
 	@Override
@@ -88,5 +94,18 @@ public class BestSetting extends Activity {
 	}
 	public void feedBack(View v) {
 	    agent.startFeedbackActivity();
+	}
+	public void createGraphicalView() {
+		ChartView chartView = new ChartView(this);
+		GraphicalView chart = chartView.getData();
+		chart.setBackgroundColor(0x88222222);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		params.topMargin = 30;
+		params.leftMargin = 30;
+		params.rightMargin = 30;
+		params.bottomMargin = Utils.dip2px(this, 45);
+		LinearLayout  layout = (LinearLayout) findViewById(R.id.best_setting);
+		layout.addView(chart, params);
+		
 	}
 }

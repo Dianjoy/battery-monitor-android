@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public DBHelper (Context c, String table) {
 	    super(c,DB_NAME, null, VERSION);
 	    tableName = table;
-	    rows = Cons.BATTERY_TIME + " datatime not null, " + Cons.BATTERY_LEVEL + " integer not null, "+ Cons.BATTERY_STATUSES +"status varchar(10) not null";
+	    rows = Cons.BATTERY_TIME + " datatime not null, " + Cons.BATTERY_LEVEL + " integer not null, "+ Cons.BATTERY_STATUSES +" varchar(10) not null";
 	}
 	@Override
 	public void onCreate(SQLiteDatabase db) {

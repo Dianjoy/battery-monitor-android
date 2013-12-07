@@ -1,9 +1,8 @@
 package com.dianjoy.batterymonitor.view;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -19,7 +18,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 
 import com.dianjoy.batterymonitor.tools.Cons;
-import com.dianjoy.batterymonitor.tools.Utils;
+import com.dianjoy.batterymonitor.tools.DBManager;
 
 public class ChartView {
 	private Context context;
@@ -64,7 +63,7 @@ public class ChartView {
 			  y[i] = Double.valueOf(counts[i]);
 			  
 		  }*/
-		  int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
+		 /* int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
 		  int begin = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT_BEGIN, Cons.BATTERY_PRE, "0"));
 		  Vector<Double> times = new Vector<Double>();
 		  Vector<Double> levels = new Vector<Double>();
@@ -90,9 +89,21 @@ public class ChartView {
 		  for(int i = 0 ; i < times.size(); i ++) {
 			  x[i] = times.get(i);
 			  y[i] = levels.get(i);
-		  }
+		  }*/
 		//  double[] x = {1, 2, 3, 5, 6,7,8,10,11,23};
 		//  double[] y = {100, 90, 80 , 40, 60, 70, 86, 23, 45, 10};
+		  DBManager db = new DBManager(context, "battery_message");
+		  HashMap<String, Object[]> data = db.query(Cons.MAX_COUNT);
+		  double[] x,y;
+		  Long[] t = (Long[])data.get(Cons.BATTERY_TIME);
+		  Integer[] l = (Integer[])data.get(Cons.BATTERY_LEVEL);
+		  x = new double[t.length];
+		  y = new double[l.length];
+		  long current = System.currentTimeMillis();
+		  for(int i = 0; i < t.length; i ++) {
+			  x[i] = (double)(t[i] - current)/ (1000 * 3600 * 24);
+			  y[i] = l[i];
+		  }
 		  xData.add(x);
 		  yData.add(y);
 		  String[] titles = {"battery"};
@@ -103,9 +114,9 @@ public class ChartView {
 			  ((XYSeriesRenderer)renderer.getSeriesRendererAt(i)).setFillPoints(true);
 			  
 		  }
-		  setChartSettings(renderer, "Battery", "Time", "Battery data", x[0], 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
-		  renderer.setXLabels(12);
-		  renderer.setYLabels(10);
+		  setChartSettings(renderer, "Battery", "Time", "Battery data", -24, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
+		  renderer.setXLabels(7);
+		  renderer.setYLabels(5);
 		  renderer.setShowGrid(true);
 		  Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
 					"fonts/HelveticaNeueLTStd-Th.otf");
@@ -117,6 +128,7 @@ public class ChartView {
 		  renderer.setPanLimits(new double[] { 0, 20, 0, 40 });
 		  renderer.setZoomLimits(new double[] { 0, 20, 0, 40 });
 		  GraphicalView view = ChartFactory.getLineChartView(context, buildDateDataset(titles, xData, yData), renderer);
+		  db.closeDB();
 		  return view;
 	  }
 	  protected XYMultipleSeriesDataset buildDateDataset(String[] titles, List<double[]> xValues,

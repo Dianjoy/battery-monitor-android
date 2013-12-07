@@ -34,7 +34,7 @@ public class Setting extends Activity {
 	private LinearLayout linearLayot;
 	private LinearLayout count;
 	private Context context;
-	private DBManager db;
+	private BatteryReceiver batteryReceiver;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,7 +83,7 @@ public class Setting extends Activity {
 		text.setTypeface(fontFace);
 		IntentFilter intentFilter = new IntentFilter(
 				Intent.ACTION_BATTERY_CHANGED);
-		BatteryReceiver batteryReceiver = new BatteryReceiver();
+		batteryReceiver = new BatteryReceiver();
 
 		//注册receiver
 		registerReceiver(batteryReceiver, intentFilter);
@@ -121,7 +121,7 @@ public class Setting extends Activity {
 					}
 				});
 		context = this;
-		db = new DBManager(this, "battery_message");
+		
 	}
 
 	@Override
@@ -141,6 +141,11 @@ public class Setting extends Activity {
 		}else {
 			return false;
 		}
+	}
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(batteryReceiver);
 	}
 	public double getBatteryMessage() {
 		int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
@@ -189,6 +194,7 @@ public class Setting extends Activity {
 				int scale = intent.getIntExtra("scale", 100);
 				textBat.setText(((level * 100) / scale) + "%");
 				int battery_level = (level * 100) / scale;
+				DBManager db = new DBManager(context, "battery_message");
 				int battery_status = intent.getIntExtra("status", -1);
 				if (battery_status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					int plugeed = intent.getIntExtra("plugged", -1);
@@ -268,6 +274,7 @@ public class Setting extends Activity {
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
 					status.setText("充电完成");
 				}
+				db.closeDB();
 			}
 		}
 	}
