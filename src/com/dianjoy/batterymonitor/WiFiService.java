@@ -261,6 +261,9 @@ public class WiFiService extends Service {
 			}
 		}
 	};
+	/**
+	 * reset the wifi and mobile status.
+	 */
     public void restoreWifiAndMobile() {
     	WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
     	int wifiStatus = Integer.valueOf(Utils.getPreferenceStr(context, WIFI_STATUS, WifiManager.WIFI_STATE_DISABLED + ""));
@@ -271,7 +274,25 @@ public class WiFiService extends Service {
     			wifi.setWifiEnabled(true);
     		}
     	}
+    	int mobileStatus = Integer.valueOf(Utils.getPreferenceStr(context, MOBILE_STATUS, -1+""));
+    	if  (mobileStatus == 2 || mobileStatus == 3) {
+    		MobileManagerOp.setMobileData(this, true);
+    	}else{
+    		MobileManagerOp.setMobileData(this, false);
+    	}
     	
+    }
+    /**
+     * remember the mobile and wifi state.
+     */
+    public void rememWifiAndMobile() {
+    	int type = this.getAPNType(this);
+        Utils.setPreferenceStr(context, MOBILE_STATUS, type+"");
+        WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        if(wifi != null) {
+        	Utils.setPreferenceStr(context, WIFI_STATUS, wifi.getWifiState()+"");
+        }
+       
     }
 	private void closeNetwork() {
 		Log.i("close", "network is close");

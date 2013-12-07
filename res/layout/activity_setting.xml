@@ -114,7 +114,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:visibility="gone"
             android:layout_weight="1">
         <ImageView
             android:layout_width="30dip"
@@ -126,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:layout_marginLeft="2dp"
-            android:text="统计"
+            android:text="分享"
             android:textSize="25sp" />
         </LinearLayout>
     </LinearLayout>

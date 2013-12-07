@@ -1,5 +1,6 @@
 package com.dianjoy.batterymonitor;
 
+import java.io.File;
 import java.util.Vector;
 
 import android.app.Activity;
@@ -10,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,8 +60,15 @@ public class Setting extends Activity {
         count.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View v) {
-        		Intent intent = new Intent(Setting.this,ChartActivity.class);
-        		startActivity(intent);
+        	//	Intent intent = new Intent(Setting.this,ChartActivity.class);
+        	//	startActivity(intent);
+        		File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/shengdian");
+        		if(!dir.exists()) {
+        			dir.mkdirs();
+        		}
+        		long current = System.currentTimeMillis();
+        		Utils.savePic(Setting.this, dir.getAbsolutePath() + "/" + current + ".png");
+        		Utils.shareMsg(context, "非常省电", "非常省电beta", "我安装了非常省电", dir.getAbsolutePath() + "/" + current + ".png");
         		
         	}
         });
