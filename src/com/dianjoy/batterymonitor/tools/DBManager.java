@@ -28,6 +28,7 @@ public class DBManager {
 	public void delete(int id) {
 		db.delete(tableName, "_id<=?", new String[]{id+""});
 	}
+	//auto delete the raw >= Cons.MAX_COUNT(96)
 	public void autoDelete() {
 		Cursor c = db.query(tableName,null,null,null,null,null,null);
 		int count = c.getCount() - Cons.MAX_COUNT - 1;

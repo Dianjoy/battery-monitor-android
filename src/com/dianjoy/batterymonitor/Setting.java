@@ -85,7 +85,7 @@ public class Setting extends Activity {
 				Intent.ACTION_BATTERY_CHANGED);
 		BatteryReceiver batteryReceiver = new BatteryReceiver();
 
-		// ע��receiver
+		//注册receiver
 		registerReceiver(batteryReceiver, intentFilter);
 		checkBoxGetInfo
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -156,7 +156,7 @@ public class Setting extends Activity {
 			int level = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_LEVEL + offset, Cons.BATTERY_PRE, "0"));
 			if (checkStatus(preStatus, preLevel, preTime) && checkStatus(status, level, time)) {
 				
-				double value = (double)(level - preLevel) /(time - preTime); //?���ǹػ������������Ҫ��Ҫȥ��
+				double value = (double)(level - preLevel) /(time - preTime); //
 				if(time - preTime  < 15 * 1000l * 60 * 2)
 					values.add(value);
 			}
@@ -175,17 +175,17 @@ public class Setting extends Activity {
 		
 	}
 	/**
-	 * �㲥������
+	 * 电池状态广播
 	 */
 	class BatteryReceiver extends BroadcastReceiver {
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			// �ж����Ƿ���Ϊ�����仯��Broadcast Action
+			// Broadcast Action
 			if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-				// ��ȡ��ǰ����
+				// 电量变化广播
 				int level = intent.getIntExtra("level", 0);
 				Log.i("battery", level + " battery level");
-				// �������̶ܿ�
+				// 获取当前电量
 				int scale = intent.getIntExtra("scale", 100);
 				textBat.setText(((level * 100) / scale) + "%");
 				int battery_level = (level * 100) / scale;
@@ -193,7 +193,7 @@ public class Setting extends Activity {
 				if (battery_status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
-						// USB��� 500mA
+						// USB充电 500mA
 						float stime = ((100 - battery_level) * 2000)
 								/ (500 * 100f);
 						stime = ((int) (stime * 10)) / 10f;
@@ -205,7 +205,7 @@ public class Setting extends Activity {
 										.indexOf("."))
 								+ "M");
 					} else if (plugeed == BatteryManager.BATTERY_PLUGGED_AC) {
-						// ��Դ��� 1000mA
+						// 直流电 1000mA
 						float stime = ((100 - battery_level) * 2000)
 								/ (1000 * 100f);
 						stime = ((int) (stime * 10)) / 10f;
@@ -218,7 +218,7 @@ public class Setting extends Activity {
 								+ "M");
 
 					}
-					status.setText("�����");
+					status.setText("充电中");
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
 					double averageLevel = db.queryRate();
 					if (averageLevel < 0) {
@@ -226,9 +226,9 @@ public class Setting extends Activity {
 						 int hour = minute / 60;
 						 String text;
 						 if (hour == 0) {
-							 text = "����" + minute + "����";
+							 text = "可用" + minute + "分钟";
 						 }else {
-							 text = "����" + hour + "Сʱ" + minute % 60 + "����";
+							 text = "可用" + hour + "小时" + minute % 60 + "分钟";
 						 }
 						 status.setText(text);
 					}
@@ -237,24 +237,24 @@ public class Setting extends Activity {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;
 						if (String.valueOf((int) stime).equals("0")) {
-							status.setText("����"
+							status.setText("可用"
 									+ String.valueOf((stime - (int) stime) * 60)
 											.substring(
 													0,
 													String.valueOf(
 															(stime - (int) stime) * 60)
 															.indexOf("."))
-									+ "����");
+									+ "小时");
 						} else {
-							status.setText("����" + String.valueOf((int) stime)
-									+ "Сʱ");
+							status.setText("可用" + String.valueOf((int) stime)
+									+ "小时");
 						}
 					} else {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
 								Setting.this,
 								WiFiService.BATTERY_DISCHARGE_TIME, "0"));
-						status.setText("����" + String.valueOf((int) timeTemp)
-								+ "Сʱ");
+						status.setText("可用" + String.valueOf((int) timeTemp)
+								+ "小时");
 						minutes.setText(String
 								.valueOf((timeTemp - (int) timeTemp) * 60)
 								.substring(
@@ -266,7 +266,7 @@ public class Setting extends Activity {
 					}
 
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
-					status.setText("������");
+					status.setText("充电完成");
 				}
 			}
 		}

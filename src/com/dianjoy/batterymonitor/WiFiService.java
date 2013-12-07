@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,8 +26,9 @@ import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.dianjoy.batterymonitor.tools.Cons;
+import com.dianjoy.batterymonitor.tools.DBManager;
 import com.dianjoy.batterymonitor.tools.Utils;
-import com.umeng.analytics.MobclickAgent;
 
 public class WiFiService extends Service {
 	private boolean screenStatus = false;
@@ -56,12 +56,12 @@ public class WiFiService extends Service {
 	public static final String BATTERY_LEVEL = "battery_level";
 	public static final String BATTERY_CHARGE_FULL = "charge_full";
 	public static final String BATTERY_PRE = "battery_message";
-	public static final String BATTERY_COUNT = "battery_count"; // ºÄµçÁ¿µÄÈ¡µãÊýÄ¿
+	public static final String BATTERY_COUNT = "battery_count"; //
 	public static final String BATTERY_TIME = "battery_time";
 	public static final String BATTERY_STATUSES = "battery_status";
-	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin"; // Æðµã
+	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin"; // 
 	public static final int MAX_COUNT = 96;
-
+	private DBManager db;
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -102,7 +102,7 @@ public class WiFiService extends Service {
 		batteryFilter = new IntentFilter();
 		batteryFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, batteryFilter);
-
+		db = new DBManager(this, "battery_message");
 		getAPNType(WiFiService.this);
 		monitor();
 		getBatteryMessage();
@@ -163,7 +163,7 @@ public class WiFiService extends Service {
 	}
 
 	/**
-	 * screenÊÇ·ñ´ò¿ª×´Ì¬
+	 * screenï¿½Ç·ï¿½ï¿½×´Ì¬
 	 * 
 	 * @param pm
 	 * @return
@@ -188,7 +188,7 @@ public class WiFiService extends Service {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°µÄÍøÂç×´Ì¬ -1£ºÃ»ÓÐÍøÂç 1£ºWIFIÍøÂç2£ºwapÍøÂç3£ºnetÍøÂç
+	 * ç½‘ç»œç±»åž‹ 1-WIFI 2 ç§»åŠ¨wap 3ç§»åŠ¨net
 	 * 
 	 * @param context
 	 * @return
@@ -229,7 +229,7 @@ public class WiFiService extends Service {
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				screenStatus = false;
-				// ½âËø
+				// ï¿½ï¿½ï¿½ï¿½
 				openNetwork();
 				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
 						.equals("true")) {
@@ -248,7 +248,7 @@ public class WiFiService extends Service {
 					clearProgress();
 				}
 				if (Utils.getPreferenceStr(context, BATTERY_STATUS,
-						BATTERY_DISCHARGE).equals(BATTERY_DISCHARGE)) {// ³äµçÊ±²»½øÈëÊ¡µç³ÌÐò
+						BATTERY_DISCHARGE).equals(BATTERY_DISCHARGE)) {// ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¡ï¿½ï¿½ï¿½ï¿½ï¿½
 					getAPNType(WiFiService.this);
 					closeNetwork();
 				} // yan.gao
@@ -327,7 +327,7 @@ public class WiFiService extends Service {
 	}
 
 	private long getAvailMemory(Context context) {
-		// »ñÈ¡µ±Ç°ÏµÍ³¿ÉÓÃÄÚ´æ
+		// 
 		ActivityManager am = (ActivityManager) context
 				.getSystemService(Context.ACTIVITY_SERVICE);
 		MemoryInfo mi = new MemoryInfo();
@@ -350,7 +350,7 @@ public class WiFiService extends Service {
 			for (String num : arrayOfString) {
 				Log.i(str2, num + "\t");
 			}
-			// »ñµÃÏµÍ³×ÜÄÚ´æ
+			// ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½Ú´ï¿½
 			initial_memory = Integer.valueOf(arrayOfString[1]).intValue() * 1024;
 			localBufferedReader.close();
 
@@ -359,17 +359,17 @@ public class WiFiService extends Service {
 		return initial_memory / (1024 * 1024);
 	}
 
-	// ÅÐ¶ÏÊÇ·ñÓÐ¶ú»ú²åÈë
+	// ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean isHeadsetHold() {
 		return audioManager.isWiredHeadsetOn();
 	}
 
-	// ÅÐ¶ÏÀ¶ÑÀÊÇ·ñ´ò¿ª
+	// ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½
 	public boolean isBlueToothHold() {
 		return bluetoothAdapter.isEnabled();
 	}
 
-	// µç³ØµçÁ¿µÄ¼àÌý¹ã²¥
+	// ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ã²¥
 	BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -378,17 +378,17 @@ public class WiFiService extends Service {
 			TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			// HashMap<String, String> map = new HashMap<String, String>();
 			// map.put("deviceid",tm.getDeviceId()+"");
-			int count = Integer.valueOf(Utils.getPreferenceStr(context,
+			/*int count = Integer.valueOf(Utils.getPreferenceStr(context,
 					BATTERY_COUNT, BATTERY_PRE, "0"));
 			int begin = Integer.valueOf(Utils.getPreferenceStr(context,
 					BATTERY_COUNT_BEGIN, BATTERY_PRE, "0"));
-			int loc = 0;
+			int loc = 0;*/
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
 				int rawlevel = intent.getIntExtra("level", -1);
 				int scale = intent.getIntExtra("scale", -1);
 				if (rawlevel >= 0 && scale > 0) {
 					battery_level = (rawlevel * 100) / scale;
-					loc = (begin + count) % MAX_COUNT;
+					/*loc = (begin + count) % MAX_COUNT;
 					Utils.setPreferenceStr(context, BATTERY_LEVEL + loc,
 							battery_level + "", BATTERY_PRE);
 					Utils.setPreferenceStr(context, BATTERY_TIME + loc,
@@ -402,21 +402,24 @@ public class WiFiService extends Service {
 					Utils.setPreferenceStr(context, BATTERY_COUNT_BEGIN, begin
 							+ "", BATTERY_PRE);
 					Utils.setPreferenceStr(context, BATTERY_COUNT, count + "",
-							BATTERY_PRE);
+							BATTERY_PRE);*/
+				}else{
+					return;
 				}
 				int status = intent.getIntExtra("status", -1);
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-					Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
-							BATTERY_CHARGE, BATTERY_PRE);
+					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_CHARGE);
+					//Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
+					//		BATTERY_CHARGE, BATTERY_PRE);
 					/*
-					 * // ³äµç×´Ì¬ int plugeed = intent.getIntExtra("plugged", -1);
+					 * // ï¿½ï¿½ï¿½×´Ì¬ int plugeed = intent.getIntExtra("plugged", -1);
 					 * if (isFirstCharge) { if (plugeed ==
-					 * BatteryManager.BATTERY_PLUGGED_USB) { // USB³äµç 500mA
+					 * BatteryManager.BATTERY_PLUGGED_USB) { // USBï¿½ï¿½ï¿½ 500mA
 					 * float stime = ((100 - battery_level) * 2000) / (500 *
 					 * 100f); stime = ((int) (stime * 10)) / 10f;
 					 * Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,
 					 * stime + ""); } else if (plugeed ==
-					 * BatteryManager.BATTERY_PLUGGED_AC) { // µçÔ´³äµç 1000mA float
+					 * BatteryManager.BATTERY_PLUGGED_AC) { // ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ 1000mA float
 					 * stime = ((100 - battery_level) * 2000) / (1000 * 100f);
 					 * stime = ((int) (stime * 10)) / 10f;
 					 * Utils.setPreferenceStr(context, BATTERY_CHARGE_TIME,
@@ -439,13 +442,13 @@ public class WiFiService extends Service {
 					 * battery_level; return; } } else { return; } }
 					 */
 				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-					// ·Åµç×´Ì¬
+					// ï¿½Åµï¿½×´Ì¬
 					// map.put("status", String.valueOf(0));
-					Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
-							BATTERY_DISCHARGE, BATTERY_PRE);
+					//Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
+					//		BATTERY_DISCHARGE, BATTERY_PRE);
 					/*
 					 * Utils.setPreferenceStr(context, BATTERY_STATUS,
-					 * BATTERY_DISCHARGE); if (isFirstDisCharge) { // ·Åµç100mA
+					 * BATTERY_DISCHARGE); if (isFirstDisCharge) { // ï¿½Åµï¿½100mA
 					 * float stime = (battery_level / 100f) * 2000 / 100f; stime
 					 * = ((int) (stime * 10)) / 10f;
 					 * Utils.setPreferenceStr(context, BATTERY_DISCHARGE_TIME,
@@ -467,16 +470,19 @@ public class WiFiService extends Service {
 					 * old_discharge_battery_level = battery_level; return; } }
 					 * else { return; } }
 					 */
+					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_DISCHARGE);
 				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
-					Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
+					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_CHARGE_FULL);
+					/*Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
 							BATTERY_CHARGE_FULL, BATTERY_PRE);
-					/*
+					
 					 * Utils.setPreferenceStr(context, BATTERY_STATUS,
 					 * BATTERY_CHARGE_FULL);
 					 */
-					// ·ÅµçÍê±Ï
+					// ï¿½Åµï¿½ï¿½ï¿½ï¿½
 					// map.put("status", String.valueOf(2));
 				}
+				db.autoDelete();
 
 				// MobclickAgent.onEvent(WiFiService.this, "battery_power",
 				// map);
