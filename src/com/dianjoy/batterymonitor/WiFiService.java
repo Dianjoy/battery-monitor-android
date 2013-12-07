@@ -20,6 +20,7 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -49,6 +50,8 @@ public class WiFiService extends Service {
 	private boolean isFirstCharge = true;
 	private boolean isFirstDisCharge = true;
 	public static final String BATTERY_STATUS = "battery_status";
+	public static final String WIFI_STATUS = "wifi_status";
+	public static final String MOBILE_STATUS = "mobile_status";
 	public static final String BATTERY_CHARGE_TIME = "battery_charge_time";
 	public static final String BATTERY_DISCHARGE_TIME = "battery_discharge_time";
 	public static final String BATTERY_CHARGE = "charge";
@@ -84,6 +87,7 @@ public class WiFiService extends Service {
 		Log.i("tag", "service is destory");
 		unregisterReceiver(screenReceiver);
 		unregisterReceiver(batteryReceiver);
+		unregisterReceiver(batteryChangeReceiver);
 	}
 
 	@Override
@@ -102,6 +106,7 @@ public class WiFiService extends Service {
 		batteryFilter = new IntentFilter();
 		batteryFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, batteryFilter);
+		registerReceiver(batteryChangeReceiver, batteryFilter);
 		//db = new DBManager(this, "battery_message");
 		context = this;
 		getAPNType(WiFiService.this);
@@ -249,14 +254,25 @@ public class WiFiService extends Service {
 					clearProgress();
 				}
 				if (Utils.getPreferenceStr(context, BATTERY_STATUS,
-						BATTERY_DISCHARGE).equals(BATTERY_DISCHARGE)) {// ���ʱ������ʡ�����
+						BATTERY_DISCHARGE).equals(BATTERY_CHARGE)) {// ���ʱ������ʡ�����
 					getAPNType(WiFiService.this);
 					closeNetwork();
 				} // yan.gao
 			}
 		}
 	};
-
+    public void restoreWifiAndMobile() {
+    	WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+    	int wifiStatus = Integer.valueOf(Utils.getPreferenceStr(context, WIFI_STATUS, WifiManager.WIFI_STATE_DISABLED + ""));
+    	if (wifi != null) {
+    		if (wifiStatus == WifiManager.WIFI_STATE_DISABLED && wifiStatus == WifiManager.WIFI_STATE_DISABLING) {
+    			wifi.setWifiEnabled(false);
+    		}else{
+    			wifi.setWifiEnabled(true);
+    		}
+    	}
+    	
+    }
 	private void closeNetwork() {
 		Log.i("close", "network is close");
 		new Timer().schedule(new TimerTask() {
@@ -473,8 +489,10 @@ public class WiFiService extends Service {
 					 * else { return; } }
 					 */
 					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_DISCHARGE);
+					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_DISCHARGE);
 				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
 					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_CHARGE_FULL);
+					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_CHARGE_FULL);
 					/*Utils.setPreferenceStr(context, BATTERY_STATUSES + loc,
 							BATTERY_CHARGE_FULL, BATTERY_PRE);
 					
@@ -488,6 +506,25 @@ public class WiFiService extends Service {
 				db.closeDB();
 				// MobclickAgent.onEvent(WiFiService.this, "battery_power",
 				// map);
+			}
+		}
+	};
+	BroadcastReceiver batteryChangeReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+			if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+				int status = intent.getIntExtra("status", -1);
+				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+					Utils.setPreferenceStr(context, BATTERY_STATUS, BATTERY_CHARGE);
+				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
+					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_DISCHARGE);
+				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
+					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_CHARGE_FULL);
+				}
+		
 			}
 		}
 	};
