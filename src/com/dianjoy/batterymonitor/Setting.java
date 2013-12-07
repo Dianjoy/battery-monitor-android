@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dianjoy.batterymonitor.tools.Cons;
+import com.dianjoy.batterymonitor.tools.DBManager;
 import com.dianjoy.batterymonitor.tools.Utils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,7 +34,7 @@ public class Setting extends Activity {
 	private LinearLayout linearLayot;
 	private LinearLayout count;
 	private Context context;
-
+	private DBManager db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,7 +85,7 @@ public class Setting extends Activity {
 				Intent.ACTION_BATTERY_CHANGED);
 		BatteryReceiver batteryReceiver = new BatteryReceiver();
 
-		// ×¢²áreceiver
+		// ×¢ï¿½ï¿½receiver
 		registerReceiver(batteryReceiver, intentFilter);
 		checkBoxGetInfo
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -120,6 +121,7 @@ public class Setting extends Activity {
 					}
 				});
 		context = this;
+		db = new DBManager(this, "battery_message");
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class Setting extends Activity {
 			int level = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_LEVEL + offset, Cons.BATTERY_PRE, "0"));
 			if (checkStatus(preStatus, preLevel, preTime) && checkStatus(status, level, time)) {
 				
-				double value = (double)(level - preLevel) /(time - preTime); //?¿¼ÂÇ¹Ø»úµÄÇé¿ö£¬Õâ¸öµãÒª²»ÒªÈ¥µô
+				double value = (double)(level - preLevel) /(time - preTime); //?ï¿½ï¿½ï¿½Ç¹Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ÒªÈ¥ï¿½ï¿½
 				if(time - preTime  < 15 * 1000l * 60 * 2)
 					values.add(value);
 			}
@@ -173,17 +175,17 @@ public class Setting extends Activity {
 		
 	}
 	/**
-	 * ¹ã²¥½ÓÊÜÕß
+	 * ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	class BatteryReceiver extends BroadcastReceiver {
 		public void onReceive(Context context, Intent intent) {
 			// TODO Auto-generated method stub
-			// ÅÐ¶ÏËüÊÇ·ñÊÇÎªµçÁ¿±ä»¯µÄBroadcast Action
+			// ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ä»¯ï¿½ï¿½Broadcast Action
 			if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-				// »ñÈ¡µ±Ç°µçÁ¿
+				// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
 				int level = intent.getIntExtra("level", 0);
 				Log.i("battery", level + " battery level");
-				// µçÁ¿µÄ×Ü¿Ì¶È
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¿Ì¶ï¿½
 				int scale = intent.getIntExtra("scale", 100);
 				textBat.setText(((level * 100) / scale) + "%");
 				int battery_level = (level * 100) / scale;
@@ -191,7 +193,7 @@ public class Setting extends Activity {
 				if (battery_status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
-						// USB³äµç 500mA
+						// USBï¿½ï¿½ï¿½ 500mA
 						float stime = ((100 - battery_level) * 2000)
 								/ (500 * 100f);
 						stime = ((int) (stime * 10)) / 10f;
@@ -203,7 +205,7 @@ public class Setting extends Activity {
 										.indexOf("."))
 								+ "M");
 					} else if (plugeed == BatteryManager.BATTERY_PLUGGED_AC) {
-						// µçÔ´³äµç 1000mA
+						// ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ 1000mA
 						float stime = ((100 - battery_level) * 2000)
 								/ (1000 * 100f);
 						stime = ((int) (stime * 10)) / 10f;
@@ -216,17 +218,17 @@ public class Setting extends Activity {
 								+ "M");
 
 					}
-					status.setText("³äµçÖÐ");
+					status.setText("ï¿½ï¿½ï¿½ï¿½ï¿½");
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-					double averageLevel = getBatteryMessage();
+					double averageLevel = db.queryRate();
 					if (averageLevel < 0) {
 						 int minute = (int)(-battery_level / averageLevel /(1000l * 60));
 						 int hour = minute / 60;
 						 String text;
 						 if (hour == 0) {
-							 text = "¿ÉÓÃ" + minute + "·ÖÖÓ";
+							 text = "ï¿½ï¿½ï¿½ï¿½" + minute + "ï¿½ï¿½ï¿½ï¿½";
 						 }else {
-							 text = "¿ÉÓÃ" + hour + "Ð¡Ê±" + minute % 60 + "·ÖÖÓ";
+							 text = "ï¿½ï¿½ï¿½ï¿½" + hour + "Ð¡Ê±" + minute % 60 + "ï¿½ï¿½ï¿½ï¿½";
 						 }
 						 status.setText(text);
 					}
@@ -235,23 +237,23 @@ public class Setting extends Activity {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;
 						if (String.valueOf((int) stime).equals("0")) {
-							status.setText("¿ÉÓÃ"
+							status.setText("ï¿½ï¿½ï¿½ï¿½"
 									+ String.valueOf((stime - (int) stime) * 60)
 											.substring(
 													0,
 													String.valueOf(
 															(stime - (int) stime) * 60)
 															.indexOf("."))
-									+ "·ÖÖÓ");
+									+ "ï¿½ï¿½ï¿½ï¿½");
 						} else {
-							status.setText("¿ÉÓÃ" + String.valueOf((int) stime)
+							status.setText("ï¿½ï¿½ï¿½ï¿½" + String.valueOf((int) stime)
 									+ "Ð¡Ê±");
 						}
 					} else {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
 								Setting.this,
 								WiFiService.BATTERY_DISCHARGE_TIME, "0"));
-						status.setText("¿ÉÓÃ" + String.valueOf((int) timeTemp)
+						status.setText("ï¿½ï¿½ï¿½ï¿½" + String.valueOf((int) timeTemp)
 								+ "Ð¡Ê±");
 						minutes.setText(String
 								.valueOf((timeTemp - (int) timeTemp) * 60)
@@ -264,7 +266,7 @@ public class Setting extends Activity {
 					}
 
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
-					status.setText("³äµçÍê³É");
+					status.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				}
 			}
 		}
