@@ -4,12 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BestSetting" >
-    <LinearLayout 
+    <LinearLayout
         android:id="@+id/best_setting"
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
     	android:orientation="vertical">
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,17 +52,41 @@
         android:textSize="25sp"
         android:clickable="true"
         android:onClick="settingWhiteList" />
-	 
-	 </LinearLayout>
-	 <LinearLayout 
-	     android:layout_width="wrap_content"
+	</LinearLayout>
+	 <LinearLayout
+	     android:layout_width="fill_parent"
 	     android:layout_height="wrap_content"
 	     android:layout_alignParentBottom="true"
-	     android:layout_alignParentRight="true"
+	     android:orientation="horizontal">
+	 <LinearLayout 
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
 	     android:layout_margin="10dp"
-	     android:orientation="vertical"
+	     android:orientation="horizontal"
+	     android:onClick="share"
+	     android:clickable="true"
+	     android:gravity="center"
+	     android:layout_weight="1"
+	     >
+	     <ImageView 
+	         android:layout_width="25dp"
+	         android:layout_height="25dp"
+	         android:src="@drawable/share"/>
+	     <TextView 
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:text="分享"
+	         android:textSize="20sp"/>
+	 </LinearLayout>
+	 <LinearLayout 
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_margin="10dp"
+	     android:orientation="horizontal"
 	     android:onClick="feedBack"
 	     android:clickable="true"
+	     android:layout_weight="1"
+	     android:gravity="center"
 	     >
 	     <ImageView 
 	         android:layout_width="25dp"
@@ -73,6 +96,7 @@
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"
 	         android:text="反馈"
-	         android:textSize="15sp"/>
+	         android:textSize="20sp"/>
+	 </LinearLayout>
 	 </LinearLayout>
 </RelativeLayout>

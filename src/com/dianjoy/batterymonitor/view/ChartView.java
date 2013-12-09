@@ -124,7 +124,7 @@ public class ChartView {
 		  renderer.setMarginsColor(0x88222222);
 		  renderer.setXLabelsAlign(Align.RIGHT);
 		  renderer.setYLabelsAlign(Align.RIGHT);
-		  renderer.setZoomButtonsVisible(true);
+		//  renderer.setZoomButtonsVisible(true);
 		  renderer.setPanLimits(new double[] { 0, 20, 0, 40 });
 		  renderer.setZoomLimits(new double[] { 0, 20, 0, 40 });
 		  GraphicalView view = ChartFactory.getLineChartView(context, buildDateDataset(titles, xData, yData), renderer);

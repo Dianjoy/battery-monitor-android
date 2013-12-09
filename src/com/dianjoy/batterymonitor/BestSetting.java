@@ -1,10 +1,13 @@
 package com.dianjoy.batterymonitor;
 
+import java.io.File;
+
 import org.achartengine.GraphicalView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -94,6 +97,15 @@ public class BestSetting extends Activity {
 	}
 	public void feedBack(View v) {
 	    agent.startFeedbackActivity();
+	}
+	public void share(View v) {
+		File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/shengdian");
+		if(!dir.exists()) {
+			dir.mkdirs();
+		}
+		long current = System.currentTimeMillis();
+		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + current + ".png");
+		Utils.shareMsg(BestSetting.this, "非常省电", "非常省电beta", "我安装了非常省电", dir.getAbsolutePath() + "/" + current + ".png");
 	}
 	public void createGraphicalView() {
 		ChartView chartView = new ChartView(this);
