@@ -20,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dianjoy.batterymonitor.tools.Cons;
 import com.dianjoy.batterymonitor.tools.DBManager;
@@ -205,6 +206,7 @@ public class Setting extends Activity {
 				int battery_level = (level * 100) / scale;
 				DBManager db = new DBManager(context, "battery_message");
 				int battery_status = intent.getIntExtra("status", -1);
+			//	Toast.makeText(context, "battery " +  level + " " + battery_status, Toast.LENGTH_SHORT).show();
 				if (battery_status == BatteryManager.BATTERY_STATUS_CHARGING) {
 					int plugeed = intent.getIntExtra("plugged", -1);
 					if (plugeed == BatteryManager.BATTERY_PLUGGED_USB) {
@@ -234,8 +236,13 @@ public class Setting extends Activity {
 
 					}
 					status.setText("充电中");
-				} else if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
+				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
+					status.setText("充电完成");
+					int a = BatteryManager.BATTERY_HEALTH_UNKNOWN;
+				}else {//if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
+				
 					double averageLevel = db.queryRate();
+				//	Toast.makeText(context, "battery " +  averageLevel + battery_status, Toast.LENGTH_SHORT).show();
 					if (averageLevel < 0) {
 						 int minute = (int)(-battery_level / averageLevel /(1000l * 60));
 						 int hour = minute / 60;
@@ -280,9 +287,7 @@ public class Setting extends Activity {
 								+ "M");
 					}
 
-				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
-					status.setText("充电完成");
-				}
+				} 
 				db.closeDB();
 			}
 		}
