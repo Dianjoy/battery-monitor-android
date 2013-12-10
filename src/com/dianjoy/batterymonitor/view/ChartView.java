@@ -84,9 +84,10 @@ public class ChartView {
 		  rxy.setLineWidth(Utils.dip2px(context, 2));
 		  rxy.setShowLegendItem(false);
 		  renderer.setXLabels(0);
-		  for(int i = 0; i < 8; i ++) {
+		  for(int i = 1; i < 8; i ++) {
 			  renderer.addXTextLabel(-i, i+"h");
 		  }
+		  renderer.addXTextLabel(0, "µ±Ç°");
 		  renderer.setYLabels(5);
 		  rxy.setColor(0xee00ee00);
 		  for(int i = 0; i < renderer.getSeriesRendererCount(); i ++){
@@ -106,6 +107,8 @@ public class ChartView {
 		  renderer.setZoomButtonsVisible(false);
 		  renderer.setPanLimits(new double[] { 0, 20, 0, 40 });
 		  renderer.setZoomLimits(new double[] { 0, 20, 0, 40 });
+		 // renderer.setShowGridY(true);
+		 // renderer.setShowGridX(true);
 		  GraphicalView view = ChartFactory.getLineChartView(context, buildDateDataset(titles, xData, yData), renderer);
 		  db.closeDB();
 		  return view;

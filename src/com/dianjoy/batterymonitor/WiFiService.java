@@ -452,18 +452,18 @@ public class WiFiService extends Service {
 						lastTime = current;
 					}
 					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_CHARGE);
-				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-					if(current - lastTime > (1000 * 60 * 15)) {
-						db.add(battery_level, current, Cons.BATTERY_DISCHARGE);
-						lastTime = current;
-					}
-					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_DISCHARGE);
-				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
+				}  else if (status == BatteryManager.BATTERY_STATUS_FULL) {
 					if(current - lastTime > (1000 * 60 * 15)) {
 						db.add(battery_level, current, Cons.BATTERY_CHARGE_FULL);
 						lastTime = current;
 					}
 					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_CHARGE_FULL);
+				}else {//(status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
+					if(current - lastTime > (1000 * 60 * 15)) {
+						db.add(battery_level, current, Cons.BATTERY_DISCHARGE);
+						lastTime = current;
+					}
+					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_DISCHARGE);
 				}
 				db.autoDelete();
 				db.closeDB();
