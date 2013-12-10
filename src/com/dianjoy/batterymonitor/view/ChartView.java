@@ -9,6 +9,7 @@ import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
 import org.achartengine.model.TimeSeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
@@ -19,6 +20,7 @@ import android.graphics.Typeface;
 
 import com.dianjoy.batterymonitor.tools.Cons;
 import com.dianjoy.batterymonitor.tools.DBManager;
+import com.dianjoy.batterymonitor.tools.Utils;
 
 public class ChartView {
 	private Context context;
@@ -56,42 +58,6 @@ public class ChartView {
 	    renderer.setLabelsColor(labelsColor);
 	  }
 	  public GraphicalView getData() {
-		 // double[] x = new double[number];
-		 // double[] y = new double[number];
-		  /*for(int i = 0; i < number; i ++) {
-			  x[i] = Double.valueOf(times[i]);
-			  y[i] = Double.valueOf(counts[i]);
-			  
-		  }*/
-		 /* int count = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT, Cons.BATTERY_PRE, "0"));
-		  int begin = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_COUNT_BEGIN, Cons.BATTERY_PRE, "0"));
-		  Vector<Double> times = new Vector<Double>();
-		  Vector<Double> levels = new Vector<Double>();
-		  long current = System.currentTimeMillis();
-		  DecimalFormat df=new DecimalFormat(".##");
-		  for (int i = 0; i < count; i ++) {
-			  int offset = (begin + i) % Cons.MAX_COUNT;
-			  String status = Utils.getPreferenceStr(context, Cons.BATTERY_STATUSES + offset, Cons.BATTERY_PRE, Cons.BATTERY_DISCHARGE);
-			  long time = Long.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_TIME + offset, Cons.BATTERY_PRE, "0"));
-			  int level = Integer.valueOf(Utils.getPreferenceStr(context, Cons.BATTERY_LEVEL + offset, Cons.BATTERY_PRE, "0"));
-			  if (time != 0 && level != 0) {
-				  double perids = (time - current)/((double)1000 * 60 * 60);
-				  times.add(Double.valueOf(df.format(perids)));
-				  levels.add((double)level);
-			  }
-		  }
-		  if(times.size() == 0) {
-			  times.add(-1.0);
-			  levels.add(55.0);
-		  }
-		  double[] x = new double[times.size()];
-		  double[] y = new double[times.size()];
-		  for(int i = 0 ; i < times.size(); i ++) {
-			  x[i] = times.get(i);
-			  y[i] = levels.get(i);
-		  }*/
-		//  double[] x = {1, 2, 3, 5, 6,7,8,10,11,23};
-		//  double[] y = {100, 90, 80 , 40, 60, 70, 86, 23, 45, 10};
 		  DBManager db = new DBManager(context, "battery_message");
 		  HashMap<String, Object[]> data = db.query(Cons.MAX_COUNT);
 		  double[] x,y;
@@ -109,22 +75,35 @@ public class ChartView {
 		  String[] titles = {"battery"};
 		  int[] colors = new int[] {Color.GREEN};
 		  PointStyle[] styles = new PointStyle[] { PointStyle.POINT};
-		  XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
+		//  XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
+		  XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		  setRenderer(renderer);
+		  XYSeriesRenderer rxy = new XYSeriesRenderer();
+		  renderer.addSeriesRenderer(rxy);
+		  rxy.setPointStyle(styles[0]);		  
+		  rxy.setLineWidth(Utils.dip2px(context, 2));
+		  rxy.setShowLegendItem(false);
+		  renderer.setXLabels(0);
+		  for(int i = 0; i < 8; i ++) {
+			  renderer.addXTextLabel(-i, i+"h");
+		  }
+		  renderer.setYLabels(5);
+		  rxy.setColor(0xee00ee00);
 		  for(int i = 0; i < renderer.getSeriesRendererCount(); i ++){
 			  ((XYSeriesRenderer)renderer.getSeriesRendererAt(i)).setFillPoints(true);
 			  
 		  }
-		  setChartSettings(renderer, "Battery", "Time", "Battery data", -24, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
-		  renderer.setXLabels(7);
-		  renderer.setYLabels(5);
-		 // renderer.setShowGrid(true);
+		  String hour = (int)-x[0] + "小时" + (int)((-x[0] - (int)(-x[0])) * 60) + "分钟前";
+		  hour = "最近8小时的电量统计";
+		  setChartSettings(renderer, "", hour, "电池电量", -8, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
 		  Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
 					"fonts/HelveticaNeueLTStd-Th.otf");
 		  renderer.setTextTypeface(fontFace);
-		  renderer.setMarginsColor(0x88222222);
+		  renderer.setMarginsColor(0xeeeeee);
+		  renderer.setBackgroundColor(0xeeeeee);
 		  renderer.setXLabelsAlign(Align.RIGHT);
 		  renderer.setYLabelsAlign(Align.RIGHT);
-		//  renderer.setZoomButtonsVisible(true);
+		  renderer.setZoomButtonsVisible(false);
 		  renderer.setPanLimits(new double[] { 0, 20, 0, 40 });
 		  renderer.setZoomLimits(new double[] { 0, 20, 0, 40 });
 		  GraphicalView view = ChartFactory.getLineChartView(context, buildDateDataset(titles, xData, yData), renderer);
@@ -152,11 +131,20 @@ public class ChartView {
 		    setRenderer(renderer, colors, styles);
 		    return renderer;
 	 }
+	 public void setRenderer(XYMultipleSeriesRenderer renderer) {
+		 float size = Utils.dip2px(context, 10);
+		 renderer.setAxisTitleTextSize(size);
+		 renderer.setChartTitleTextSize(size);
+		 renderer.setLabelsTextSize(size);
+		 renderer.setLegendTextSize(size);
+		 renderer.setPointSize(5f);
+		 renderer.setMargins(new int[] { Utils.dip2px(context, 10), Utils.dip2px(context, 20), Utils.dip2px(context,20), Utils.dip2px(context, 10) });
+	 }
 	  protected void setRenderer(XYMultipleSeriesRenderer renderer, int[] colors, PointStyle[] styles) {
 		    renderer.setAxisTitleTextSize(16);
 		    renderer.setChartTitleTextSize(20);
 		    renderer.setLabelsTextSize(15);
-		    renderer.setLegendTextSize(15);
+		    renderer.setLegendTextSize(20);
 		    renderer.setPointSize(5f);
 		    renderer.setMargins(new int[] { 20, 30, 15, 20 });
 		    int length = colors.length;

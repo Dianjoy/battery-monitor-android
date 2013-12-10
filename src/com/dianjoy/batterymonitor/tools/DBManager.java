@@ -67,6 +67,7 @@ public class DBManager {
 		Integer level[] = new Integer[arrayLength];
 		String status[] = new String[arrayLength];
 		arrayLength --;
+		long current = System.currentTimeMillis();
 		if(c.moveToLast()) {
 			do{
 				time[arrayLength] = c.getLong(c.getColumnIndex(Cons.BATTERY_TIME));

@@ -64,6 +64,7 @@ public class WiFiService extends Service {
 	public static final String BATTERY_STATUSES = "battery_status";
 	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin"; // 
 	public static final int MAX_COUNT = 96;
+	public static long lastTime;
 	private Context context;
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -87,7 +88,9 @@ public class WiFiService extends Service {
 		Log.i("tag", "service is destory");
 		unregisterReceiver(screenReceiver);
 		unregisterReceiver(batteryReceiver);
-		unregisterReceiver(batteryChangeReceiver);
+		unregisterReceiver(batteryReceiver);
+
+		//unregisterReceiver(batteryChangeReceiver);
 	}
 
 	@Override
@@ -106,15 +109,18 @@ public class WiFiService extends Service {
 		batteryFilter = new IntentFilter();
 		batteryFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, batteryFilter);
-		registerReceiver(batteryChangeReceiver, batteryFilter);
+		//registerReceiver(batteryChangeReceiver, batteryFilter);
+		registerReceiver(batteryReceiver, batteryFilter);
 		//db = new DBManager(this, "battery_message");
 		context = this;
 		getAPNType(WiFiService.this);
 		monitor();
-		getBatteryMessage();
+		//getBatteryMessage();
+		Log.i("batterystatus", "getBatteryMessage");
+		lastTime = 0;
 	}
 
-	private void getBatteryMessage() {
+	private void getBatteryMessage() { //no use
 		new Timer().schedule(new TimerTask() {
 
 			@Override
@@ -127,7 +133,7 @@ public class WiFiService extends Service {
 
 			}
 
-		}, 0, 15 * 60 * 1000l);
+		}, 0, 1 * 60 * 1000l);
 	}
 
 	private void monitor() {
@@ -411,17 +417,17 @@ public class WiFiService extends Service {
 		return initial_memory / (1024 * 1024);
 	}
 
-	// 锟叫讹拷锟角凤拷锟叫讹拷锟斤拷锟斤拷
+	//
 	public boolean isHeadsetHold() {
 		return audioManager.isWiredHeadsetOn();
 	}
 
-	// 锟叫讹拷锟斤拷锟斤拷锟角凤拷锟�
+	// 
 	public boolean isBlueToothHold() {
 		return bluetoothAdapter.isEnabled();
 	}
 
-	// 锟斤拷氐锟斤拷锟斤拷募锟斤拷锟姐播
+	// 
 	BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -438,13 +444,25 @@ public class WiFiService extends Service {
 					return;
 				}
 				int status = intent.getIntExtra("status", -1);
+				Log.i("batterystatus",status + " " + battery_level);
+				long current = System.currentTimeMillis();
 				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_CHARGE);
+					if(current - lastTime > (1000 * 60 * 15)) {
+						db.add(battery_level, current, Cons.BATTERY_CHARGE);
+						lastTime = current;
+					}
+					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_CHARGE);
 				} else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_DISCHARGE);
+					if(current - lastTime > (1000 * 60 * 15)) {
+						db.add(battery_level, current, Cons.BATTERY_DISCHARGE);
+						lastTime = current;
+					}
 					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_DISCHARGE);
 				} else if (status == BatteryManager.BATTERY_STATUS_FULL) {
-					db.add(battery_level, System.currentTimeMillis(), Cons.BATTERY_CHARGE_FULL);
+					if(current - lastTime > (1000 * 60 * 15)) {
+						db.add(battery_level, current, Cons.BATTERY_CHARGE_FULL);
+						lastTime = current;
+					}
 					Utils.setPreferenceStr(context, WiFiService.BATTERY_STATUS, WiFiService.BATTERY_CHARGE_FULL);
 				}
 				db.autoDelete();

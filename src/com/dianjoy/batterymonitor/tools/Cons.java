@@ -10,5 +10,5 @@ public class Cons {
 	public static final String BATTERY_TIME = "battery_time";
 	public static final String BATTERY_STATUSES = "battery_status";
 	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin";  //Æðµã
-	public static final int MAX_COUNT = 96;
+	public static final int MAX_COUNT = 32;
 }

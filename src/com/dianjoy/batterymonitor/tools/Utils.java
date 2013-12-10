@@ -59,23 +59,23 @@ public class Utils {
 	}
 
 	private static Bitmap takeScreenShot(Activity activity) {
-		// View是你需要截图的View
+		// View鏄綘闇�鎴浘鐨刅iew
 		View view = activity.getWindow().getDecorView();
 		view.setDrawingCacheEnabled(true);
 		view.buildDrawingCache();
 		Bitmap b1 = view.getDrawingCache();
-
-		// 获取状态栏高度
+		// 鑾峰彇鐘舵�鏍忛珮搴�
 		Rect frame = new Rect();
 		activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
 		int statusBarHeight = frame.top;
 		Log.i("TAG", "" + statusBarHeight);
 
-		// 获取屏幕长和高
 		int width = activity.getWindowManager().getDefaultDisplay().getWidth();
 		int height = activity.getWindowManager().getDefaultDisplay()
 				.getHeight();
-		// 去掉标题栏
+		height = Math.min(height, b1.getHeight());
+		width = Math.min(width, b1.getWidth());
+		statusBarHeight = Math.max(0, statusBarHeight);
 		// Bitmap b = Bitmap.createBitmap(b1, 0, 25, 320, 455);
 		Bitmap b = Bitmap.createBitmap(b1, 0, statusBarHeight, width, height
 				- statusBarHeight);
@@ -99,12 +99,12 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-    //分享功能.
+    //鍒嗕韩鍔熻兘.
 	public static void shareMsg(Context context, String activityTitle,
 			String msgTitle, String msgText, String imgPath) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		if (imgPath == null || imgPath.equals("")) {
-			intent.setType("text/plain"); // 纯文本
+			intent.setType("text/plain"); // 绾枃鏈�
 		} else {
 			File f = new File(imgPath);
 			if (f != null && f.exists() && f.isFile()) {
