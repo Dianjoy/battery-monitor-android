@@ -107,8 +107,8 @@ public class ChartView {
 		  xData.add(x);
 		  yData.add(y);
 		  String[] titles = {"battery"};
-		  int[] colors = new int[] {Color.LTGRAY};
-		  PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE};
+		  int[] colors = new int[] {Color.GREEN};
+		  PointStyle[] styles = new PointStyle[] { PointStyle.POINT};
 		  XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
 		  for(int i = 0; i < renderer.getSeriesRendererCount(); i ++){
 			  ((XYSeriesRenderer)renderer.getSeriesRendererAt(i)).setFillPoints(true);
@@ -117,7 +117,7 @@ public class ChartView {
 		  setChartSettings(renderer, "Battery", "Time", "Battery data", -24, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
 		  renderer.setXLabels(7);
 		  renderer.setYLabels(5);
-		  renderer.setShowGrid(true);
+		 // renderer.setShowGrid(true);
 		  Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
 					"fonts/HelveticaNeueLTStd-Th.otf");
 		  renderer.setTextTypeface(fontFace);
