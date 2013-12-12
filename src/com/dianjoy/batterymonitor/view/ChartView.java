@@ -87,16 +87,16 @@ public class ChartView {
 		  for(int i = 1; i < 8; i ++) {
 			  renderer.addXTextLabel(-i, i+"h");
 		  }
-		  renderer.addXTextLabel(0, "µ±Ç°");
+		  renderer.addXTextLabel(0, "å½“å‰");
 		  renderer.setYLabels(5);
 		  rxy.setColor(0xee00ee00);
 		  for(int i = 0; i < renderer.getSeriesRendererCount(); i ++){
 			  ((XYSeriesRenderer)renderer.getSeriesRendererAt(i)).setFillPoints(true);
 			  
 		  }
-		  String hour = (int)-x[0] + "Ð¡Ê±" + (int)((-x[0] - (int)(-x[0])) * 60) + "·ÖÖÓÇ°";
-		  hour = "×î½ü8Ð¡Ê±µÄµçÁ¿Í³¼Æ";
-		  setChartSettings(renderer, "", hour, "µç³ØµçÁ¿", -8, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
+		  String hour = (int)-x[0] + "å°æ—¶" + (int)((-x[0] - (int)(-x[0])) * 60) + "åˆ†é’Ÿå‰";
+		  hour = "æœ€è¿‘8å°æ—¶çš„ç”µé‡ç»Ÿè®¡";
+		  setChartSettings(renderer, "", hour, "ç”µæ± ä¿¡æ¯", -8, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
 		  Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
 					"fonts/HelveticaNeueLTStd-Th.otf");
 		  renderer.setTextTypeface(fontFace);
@@ -109,7 +109,7 @@ public class ChartView {
 		  renderer.setZoomLimits(new double[] { 0, 20, 0, 40 });
 		 // renderer.setShowGridY(true);
 		 // renderer.setShowGridX(true);
-		  GraphicalView view = ChartFactory.getLineChartView(context, buildDateDataset(titles, xData, yData), renderer);
+		  GraphicalView view = ChartFactory.getCubeLineChartView(context, buildDateDataset(titles, xData, yData), renderer, 0.3f);
 		  db.closeDB();
 		  return view;
 	  }

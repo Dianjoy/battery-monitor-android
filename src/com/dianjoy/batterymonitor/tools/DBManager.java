@@ -60,14 +60,18 @@ public class DBManager {
 		return rate / rates.size();
 	}
 	public HashMap<String, Object[]> query(int num) {
-		Cursor c = db.query(tableName,null,null,null,null,null,null);
+		long current = System.currentTimeMillis();
+		current -= (8 * 1000 * 3600);
+		String selection = Cons.BATTERY_TIME + ">=?";
+		String[] arg = {current+""};
+		Cursor c = db.query(tableName,null,selection,arg,null,null,null);
 	    int count = c.getCount();
 	    int arrayLength = Math.min(count, num);
 	    Long time[] = new Long[arrayLength];
 		Integer level[] = new Integer[arrayLength];
 		String status[] = new String[arrayLength];
 		arrayLength --;
-		long current = System.currentTimeMillis();
+		//long current = System.currentTimeMillis();
 		if(c.moveToLast()) {
 			do{
 				time[arrayLength] = c.getLong(c.getColumnIndex(Cons.BATTERY_TIME));
