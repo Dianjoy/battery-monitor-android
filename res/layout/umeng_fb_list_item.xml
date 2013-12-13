@@ -3,14 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginBottom="10dp"
-     android:background="#22222222"
-    >
+    android:background="#22222222" >
 
     <RelativeLayout
         android:id="@+id/umeng_fb_list_reply_header"
         android:layout_width="fill_parent"
         android:layout_height="20dp"
-       
         android:orientation="horizontal" >
 
         <TextView
@@ -44,8 +42,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#44444444"
-        android:layout_below="@id/umeng_fb_list_reply_header" >
+        android:layout_below="@id/umeng_fb_list_reply_header"
+        android:background="#44444444" >
 
         <Button
             android:id="@+id/umeng_fb_reply_content"
@@ -54,10 +52,9 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/umeng_fb_reply_right_bg"
+            android:gravity="center_vertical"
             android:maxWidth="300dp"
             android:textColor="#222222"
-            android:textIsSelectable="true"
-            android:gravity="center_vertical"
             android:textSize="13sp" />
     </RelativeLayout>
 

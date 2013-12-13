@@ -105,7 +105,7 @@ public class BestSetting extends Activity {
 		}
 		long current = System.currentTimeMillis();
 		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + current + ".png");
-		Utils.shareMsg(BestSetting.this, "非常省电", "非常省电beta", "我安装了非常省电", dir.getAbsolutePath() + "/" + current + ".png");
+		Utils.shareMsg(BestSetting.this, "闈炲父鐪佺數", "闈炲父鐪佺數", "闈炲父鐪佺數", dir.getAbsolutePath() + "/" + current + ".png");
 	}
 	public void createGraphicalView() {
 		ChartView chartView = new ChartView(this);
