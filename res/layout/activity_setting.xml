@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
-            android:text="设置"
+            android:text="@string/setting"
             android:textSize="25sp" />
         </LinearLayout>
         <LinearLayout 

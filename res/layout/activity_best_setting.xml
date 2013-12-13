@@ -4,17 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BestSetting" >
+    
     <LinearLayout
         android:id="@+id/best_setting"
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
     	android:orientation="vertical">
-    <TextView
+       <RelativeLayout 
+       android:layout_height="45dp"
+       android:layout_width="fill_parent"
+       android:gravity="center_vertical"
+       >
+       <ImageButton 
+           android:id="@+id/best_setting_title_back"
+           android:layout_width="67dp"
+           android:layout_height="wrap_content"
+           android:layout_centerVertical="true"
+           android:layout_alignParentLeft="true"
+           android:layout_marginRight="5dp"
+           android:background="@drawable/title_btn_back"
+           android:onClick="backButton"
+           android:src="@drawable/title_back"/>
+       <TextView 
+           android:id="@+id/best_setting_title_text"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerInParent="true"
+           android:textSize="20sp"
+           android:textColor="#EEEEEE"
+           android:text=""
+         />
+     </RelativeLayout>
+     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
-        android:layout_marginTop="20dip"
-        android:text="高级设置"
+        android:layout_marginTop="10dip"
+        android:text="@string/best_setting"
         android:textSize="25sp" />
 
     <CheckBox
@@ -23,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dip"
         android:layout_marginTop="10dip"
-        android:text=" 锁屏时允许接受消息" >
+        android:text="@string/best_setting_message" >
     </CheckBox>
 
     <CheckBox
@@ -31,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="45dip"
-        android:text=" 解锁屏时自动清理后台进程" >
+        android:text="@string/best_setting_process" >
     </CheckBox>
 	 <TextView
         android:layout_width="wrap_content"
@@ -48,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
         android:layout_marginTop="20dip"
-        android:text="电量统计"
+        android:text="@string/battery_count"
         android:textSize="25sp"
         android:clickable="true"
         android:onClick="settingWhiteList" />
@@ -75,7 +101,7 @@
 	     <TextView 
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"
-	         android:text="分享"
+	         android:text="@string/share"
 	         android:textSize="20sp"/>
 	 </LinearLayout>
 	 <LinearLayout 
@@ -95,7 +121,7 @@
 	     <TextView 
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"
-	         android:text="反馈"
+	         android:text="@string/feedback"
 	         android:textSize="20sp"/>
 	 </LinearLayout>
 	 </LinearLayout>

@@ -99,12 +99,12 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-    //鍒嗕韩鍔熻兘.
+    //
 	public static void shareMsg(Context context, String activityTitle,
 			String msgTitle, String msgText, String imgPath) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		if (imgPath == null || imgPath.equals("")) {
-			intent.setType("text/plain"); // 绾枃鏈�
+			intent.setType("text/plain"); //
 		} else {
 			File f = new File(imgPath);
 			if (f != null && f.exists() && f.isFile()) {

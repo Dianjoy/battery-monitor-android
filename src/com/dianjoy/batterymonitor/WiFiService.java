@@ -20,6 +20,7 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
@@ -145,6 +146,9 @@ public class WiFiService extends Service {
 				if (Utils.getPreferenceStr(WiFiService.this, "getInfo").equals(
 						"true")) {
 					if (!isScreenOn()) {
+						wifiStatus = Integer.valueOf(Utils.getPreferenceStr(context, WIFI_STATUS, WifiManager.WIFI_STATE_DISABLED + ""));
+						boolean mobile = Boolean.valueOf(Utils.getPreferenceStr(context, MOBILE_STATUS, false+""));
+						mobileStatus = mobile?1:0;
 						if (wifiStatus == 1) {
 							new WiFiManagerOp(WiFiService.this).openWifi();
 						}
@@ -241,8 +245,9 @@ public class WiFiService extends Service {
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				screenStatus = false;
-				// 锟斤拷锟斤拷
-				openNetwork();
+				//
+				//openNetwork();
+				restoreWifiAndMobile();  //恢复原来的wifi和移动数据状态。
 				if (Utils.getPreferenceStr(WiFiService.this, "progressInfo")
 						.equals("true")) {
 					clearProgress();
@@ -250,6 +255,8 @@ public class WiFiService extends Service {
 
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				screenStatus = true;
+				rememWifiAndMobile();  // 记录当前wifi和移动数据的状态。
+				closeWifi();// 一分钟连接不成功后关闭wifi.
 				if (isHeadsetHold() || isBlueToothHold()) {
 					wifiStatus = 0;
 					mobileStatus = 0;
@@ -260,7 +267,7 @@ public class WiFiService extends Service {
 					clearProgress();
 				}
 				if (Utils.getPreferenceStr(context, BATTERY_STATUS,
-						BATTERY_DISCHARGE).equals(BATTERY_CHARGE)) {// 锟斤拷锟绞憋拷锟斤拷锟斤拷锟绞★拷锟斤拷锟斤拷
+						BATTERY_DISCHARGE).equals(BATTERY_DISCHARGE)) {// 锟斤拷锟绞憋拷锟斤拷锟斤拷锟绞★拷锟斤拷锟斤拷
 					getAPNType(WiFiService.this);
 					closeNetwork();
 				} // yan.gao
@@ -280,20 +287,30 @@ public class WiFiService extends Service {
     			wifi.setWifiEnabled(true);
     		}
     	}
-    	int mobileStatus = Integer.valueOf(Utils.getPreferenceStr(context, MOBILE_STATUS, -1+""));
-    	if  (mobileStatus == 2 || mobileStatus == 3) {
+        boolean mobileStatus = Boolean.valueOf(Utils.getPreferenceStr(context, MOBILE_STATUS, false+""));
+    /*	if  (mobileStatus == 2 || mobileStatus == 3) {
     		MobileManagerOp.setMobileData(this, true);
     	}else{
     		MobileManagerOp.setMobileData(this, false);
-    	}
+    	}*/
+        MobileManagerOp.setMobileData(this, mobileStatus);
     	
     }
     /**
      * remember the mobile and wifi state.
      */
     public void rememWifiAndMobile() {
-    	int type = this.getAPNType(this);
-        Utils.setPreferenceStr(context, MOBILE_STATUS, type+"");
+    	 String methodName = "getMobileDataEnabled";  
+    	 ConnectivityManager mConnectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);  
+         Class cmClass = mConnectivityManager.getClass();  
+         Boolean isOpen = null;    
+         try{  
+             Method method = cmClass.getMethod(methodName, null);  
+             isOpen = (Boolean) method.invoke(mConnectivityManager, null);  
+             Utils.setPreferenceStr(context, MOBILE_STATUS, isOpen.toString());
+         }catch (Exception e){  
+             e.printStackTrace();  
+         }  
         WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
         if(wifi != null) {
         	Utils.setPreferenceStr(context, WIFI_STATUS, wifi.getWifiState()+"");
@@ -306,7 +323,7 @@ public class WiFiService extends Service {
      */
     public void closeWifi() {
     	Timer connectWifi = new Timer();
-    	new WiFiManagerOp(this).openWifi();
+    	//new WiFiManagerOp(this).openWifi();
     	TimerTask task = new TimerTask() {
     		@Override
     		public void run() {
@@ -328,10 +345,11 @@ public class WiFiService extends Service {
 				if (screenStatus) {
 					Log.i("yayyayya", "sfdsfsdf");
 					new WiFiManagerOp(WiFiService.this).closeWifi();
+					Utils.setPreferenceStr(context, "test", "test");
 					MobileManagerOp.setMobileData(WiFiService.this, false);
 				}
 			}
-		}, 90 * 1000);
+		}, 300 * 1000);
 	}
 
 	private void openNetwork() {

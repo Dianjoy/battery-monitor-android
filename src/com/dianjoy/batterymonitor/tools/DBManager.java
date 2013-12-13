@@ -91,7 +91,10 @@ public class DBManager {
 		}
 		//*********
 		int mark = time.length - 1;
-		while(time[mark] > current) {
+		while(mark > 0) {
+			if(time[mark] <= current){
+				break;
+			}
 			mark --;
 		}
 		arrayLength = time.length - mark;

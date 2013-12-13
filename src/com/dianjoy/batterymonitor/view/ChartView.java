@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 
+import com.dianjoy.batterymonitor.R;
 import com.dianjoy.batterymonitor.tools.Cons;
 import com.dianjoy.batterymonitor.tools.DBManager;
 import com.dianjoy.batterymonitor.tools.Utils;
@@ -87,16 +88,16 @@ public class ChartView {
 		  for(int i = 1; i < 8; i ++) {
 			  renderer.addXTextLabel(-i, i+"h");
 		  }
-		  renderer.addXTextLabel(0, "当前");
+		  renderer.addXTextLabel(0, context.getResources().getString(R.string.current));
 		  renderer.setYLabels(5);
 		  rxy.setColor(0xee00ee00);
 		  for(int i = 0; i < renderer.getSeriesRendererCount(); i ++){
 			  ((XYSeriesRenderer)renderer.getSeriesRendererAt(i)).setFillPoints(true);
 			  
 		  }
-		  String hour = (int)-x[0] + "小时" + (int)((-x[0] - (int)(-x[0])) * 60) + "分钟前";
-		  hour = "最近8小时的电量统计";
-		  setChartSettings(renderer, "", hour, "电池信息", -8, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
+		  String hour = (int)-x[0] + context.getResources().getString(R.string.hour) + (int)((-x[0] - (int)(-x[0])) * 60) + context.getResources().getString(R.string.minute);
+		  hour = context.getResources().getString(R.string.eight_hour);
+		  setChartSettings(renderer, "", hour, context.getResources().getString(R.string.battery_message), -8, 0, 0, 100, Color.LTGRAY, Color.LTGRAY);
 		  Typeface fontFace = Typeface.createFromAsset(context.getAssets(),
 					"fonts/HelveticaNeueLTStd-Th.otf");
 		  renderer.setTextTypeface(fontFace);

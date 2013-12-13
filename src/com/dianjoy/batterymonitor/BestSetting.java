@@ -105,7 +105,9 @@ public class BestSetting extends Activity {
 		}
 		long current = System.currentTimeMillis();
 		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + current + ".png");
-		Utils.shareMsg(BestSetting.this, "非常省电", "非常省电", "非常省电", dir.getAbsolutePath() + "/" + current + ".png");
+		String shareTitle = this.getResources().getString(R.string.share_title);
+		String shareContent = this.getResources().getString(R.string.share_content);
+		Utils.shareMsg(BestSetting.this, shareTitle, shareTitle, shareContent, dir.getAbsolutePath() + "/" + current + ".png");
 	}
 	public void createGraphicalView() {
 		ChartView chartView = new ChartView(this);
@@ -119,5 +121,8 @@ public class BestSetting extends Activity {
 		LinearLayout  layout = (LinearLayout) findViewById(R.id.best_setting);
 		layout.addView(chart, params);
 		
+	}
+	public void backButton(View v) {
+		this.finish();
 	}
 }

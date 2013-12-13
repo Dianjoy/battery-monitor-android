@@ -198,6 +198,9 @@ public class Setting extends Activity {
 			// Broadcast Action
 			if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
 				// 电量变化广播
+				String use = context.getResources().getString(R.string.use);
+				String hourText = context.getResources().getString(R.string.hour);
+				String miniteText = context.getResources().getString(R.string.minute);
 				int level = intent.getIntExtra("level", 0);
 				Log.i("battery", level + " battery level");
 				// 获取当前电量
@@ -235,9 +238,9 @@ public class Setting extends Activity {
 								+ "M");
 
 					}
-					status.setText("充电中");
+					status.setText(context.getResources().getString(R.string.charging));
 				} else if (battery_status == BatteryManager.BATTERY_STATUS_FULL) {
-					status.setText("充电完成");
+					status.setText(context.getResources().getString(R.string.charge_full));
 					int a = BatteryManager.BATTERY_HEALTH_UNKNOWN;
 				}else {//if (battery_status == BatteryManager.BATTERY_STATUS_DISCHARGING) {
 				
@@ -248,9 +251,9 @@ public class Setting extends Activity {
 						 int hour = minute / 60;
 						 String text;
 						 if (hour == 0) {
-							 text = "可用" + minute + "分钟";
+							 text = use + minute + miniteText;
 						 }else {
-							 text = "可用" + hour + "小时" + minute % 60 + "分钟";
+							 text = use + hour + hourText + minute % 60 + miniteText;
 						 }
 						 status.setText(text);
 					}
@@ -259,24 +262,24 @@ public class Setting extends Activity {
 						float stime = (battery_level / 100f) * 2000 / 100f;
 						stime = ((int) (stime * 10)) / 10f;
 						if (String.valueOf((int) stime).equals("0")) {
-							status.setText("可用"
+							status.setText(use
 									+ String.valueOf((stime - (int) stime) * 60)
 											.substring(
 													0,
 													String.valueOf(
 															(stime - (int) stime) * 60)
 															.indexOf("."))
-									+ "小时");
+									+ hourText);
 						} else {
-							status.setText("可用" + String.valueOf((int) stime)
-									+ "小时");
+							status.setText(use + String.valueOf((int) stime)
+									+ hourText);
 						}
 					} else {
 						float timeTemp = Float.valueOf(Utils.getPreferenceStr(
 								Setting.this,
 								WiFiService.BATTERY_DISCHARGE_TIME, "0"));
-						status.setText("可用" + String.valueOf((int) timeTemp)
-								+ "小时");
+						status.setText(use + String.valueOf((int) timeTemp)
+								+ hourText);
 						minutes.setText(String
 								.valueOf((timeTemp - (int) timeTemp) * 60)
 								.substring(

@@ -9,35 +9,35 @@ import android.net.ConnectivityManager;
 
 public class MobileManagerOp {
 	/**
-	 * 移动网络开关
+	 * 
 	 */
 	public static void setMobileData(Context context, boolean enabled) {
 		ConnectivityManager conMgr = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		Class<?> conMgrClass = null; // ConnectivityManager类
-		Field iConMgrField = null; // ConnectivityManager类中的字段
-		Object iConMgr = null; // IConnectivityManager类的引用
-		Class<?> iConMgrClass = null; // IConnectivityManager类
-		Method setMobileDataEnabledMethod = null; // setMobileDataEnabled方法
+		Class<?> conMgrClass = null; // ConnectivityManager
+		Field iConMgrField = null; // ConnectivityManager
+		Object iConMgr = null; // IConnectivityManager
+		Class<?> iConMgrClass = null; // IConnectivityManager
+		Method setMobileDataEnabledMethod = null; // setMobileDataEnable
 
 		try {
-			// 取得ConnectivityManager类
+			// 取锟斤拷ConnectivityManager锟斤拷
 			conMgrClass = Class.forName(conMgr.getClass().getName());
-			// 取得ConnectivityManager类中的对象mService
+			// 取锟斤拷ConnectivityManager锟斤拷锟叫的讹拷锟斤拷mService
 			iConMgrField = conMgrClass.getDeclaredField("mService");
-			// 设置mService可访问
+			// 锟斤拷锟斤拷mService锟缴凤拷锟斤拷
 			iConMgrField.setAccessible(true);
-			// 取得mService的实例化类IConnectivityManager
+			// 取锟斤拷mService锟斤拷实锟斤拷锟斤拷IConnectivityManager
 			iConMgr = iConMgrField.get(conMgr);
-			// 取得IConnectivityManager类
+			// 取锟斤拷IConnectivityManager锟斤拷
 			iConMgrClass = Class.forName(iConMgr.getClass().getName());
-			// 取得IConnectivityManager类中的setMobileDataEnabled(boolean)方法
+			// 取锟斤拷IConnectivityManager锟斤拷锟叫碉拷setMobileDataEnabled(boolean)锟斤拷锟斤拷
 			setMobileDataEnabledMethod = iConMgrClass.getDeclaredMethod(
 					"setMobileDataEnabled", Boolean.TYPE);
-			// 设置setMobileDataEnabled方法可访问
+			// 锟斤拷锟斤拷setMobileDataEnabled锟斤拷锟斤拷锟缴凤拷锟斤拷
 			setMobileDataEnabledMethod.setAccessible(true);
-			// 调用setMobileDataEnabled方法
+			// 锟斤拷锟斤拷setMobileDataEnabled锟斤拷锟斤拷
 			setMobileDataEnabledMethod.invoke(iConMgr, enabled);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

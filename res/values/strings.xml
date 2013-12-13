@@ -9,4 +9,22 @@
     <string name="title_activity_best_setting">BestSetting</string>
 	<string name="title_white_list">白名单设置</string>
 	<string name="title_count">耗电统计</string>
+	<string name="best_setting_message">锁屏时允许接受联网消息</string>
+	<string name="best_setting_process">解锁屏时自动清理后台进程</string>
+	<string name="best_setting">高级设置</string>
+	<string name="setting">设置</string>
+	<string name="charging">充电中</string>
+	<string name="charge_full">充电完成</string>
+	<string name="use">可用</string>
+	<string name="hour">小时</string>
+	<string name="minute">分钟</string>
+	<string name="share">分享</string>
+	<string name="feedback">反馈</string>
+	<string name="battery_count">电量统计</string>
+	<string name="eight_hour">最近8小时的电量统计</string>
+	<string name="battery_message">电池信息</string>
+	<string name="back">返回</string>
+	<string name="current">当前</string>
+	<string name="share_title">非常省电</string>
+	<string name="share_content">我安装了非常省电</string>
 </resources>
