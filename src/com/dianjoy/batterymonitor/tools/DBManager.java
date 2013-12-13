@@ -64,26 +64,51 @@ public class DBManager {
 		current -= (8 * 1000 * 3600);
 		String selection = Cons.BATTERY_TIME + ">=?";
 		String[] arg = {current+""};
-		Cursor c = db.query(tableName,null,selection,arg,null,null,null);
+		//Cursor c = db.query(tableName,null,selection,arg,null,null,null);
+		Cursor c = db.query(tableName, null, null, null, null, null, null);
 	    int count = c.getCount();
 	    int arrayLength = Math.min(count, num);
 	    Long time[] = new Long[arrayLength];
 		Integer level[] = new Integer[arrayLength];
 		String status[] = new String[arrayLength];
 		arrayLength --;
+		int firstLevel = 0;
 		//long current = System.currentTimeMillis();
 		if(c.moveToLast()) {
 			do{
 				time[arrayLength] = c.getLong(c.getColumnIndex(Cons.BATTERY_TIME));
 				level[arrayLength] = c.getInt(c.getColumnIndex(Cons.BATTERY_LEVEL));
 				status[arrayLength] = c.getString(c.getColumnIndex(Cons.BATTERY_STATUSES));
+				/*if(time[arrayLength] < current) {
+					time[arrayLength] = current + (10 * 60 * 1000);
+					if(firstLevel == 0) {
+						firstLevel = level[arrayLength];
+					}
+					level[arrayLength] = firstLevel;
+				}*/
 				arrayLength --;
 			}while(c.moveToPrevious() && arrayLength >= 0);
 		}
+		//*********
+		int mark = time.length - 1;
+		while(time[mark] > current) {
+			mark --;
+		}
+		arrayLength = time.length - mark;
+		Long time2[] = new Long[arrayLength];
+		Integer level2[] = new Integer[arrayLength];
+	    String status2[] = new String[arrayLength];
+	    for(int i = 0; i < arrayLength; i ++) {
+	    	time2[i] = time[mark + i];
+	    	level2[i] = level[mark + i];
+	    	status2[i] = status[mark + i];
+	    }
+	    time2[0] = current;
+	    //*******
 		HashMap<String, Object[]> data = new HashMap<String, Object[]>();
-		data.put(Cons.BATTERY_LEVEL, level);
-		data.put(Cons.BATTERY_TIME, time);
-		data.put(Cons.BATTERY_STATUSES, status);
+		data.put(Cons.BATTERY_LEVEL, level2);
+		data.put(Cons.BATTERY_TIME, time2);
+		data.put(Cons.BATTERY_STATUSES, status2);
 		c.close();
 		return data;
 		
