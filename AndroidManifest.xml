@@ -22,7 +22,7 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.dianjoy.batterymonitor.Setting"
+            android:name="com.dianjoy.batterymonitor.BootActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
@@ -46,7 +46,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-
+        <activity 
+            android:name="com.dianjoy.batterymonitor.Setting"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
         <activity
             android:name="com.dianjoy.batterymonitor.BestSetting"
            android:theme="@android:style/Theme.NoTitleBar">
