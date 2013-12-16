@@ -56,6 +56,7 @@ public class ChartView {
 	    renderer.setYAxisMin(yMin);
 	    renderer.setYAxisMax(yMax);
 	    renderer.setAxesColor(axesColor);
+	    renderer.setYLabelsPadding(Utils.dip2px(context, 2));
 	    renderer.setLabelsColor(labelsColor);
 	  }
 	  public GraphicalView getData() {
@@ -105,6 +106,7 @@ public class ChartView {
 		  renderer.setBackgroundColor(0xeeeeee);
 		  renderer.setXLabelsAlign(Align.RIGHT);
 		  renderer.setYLabelsAlign(Align.RIGHT);
+		 // renderer.setYLabelsAlign(Align.RIGHT, 10);
 		  renderer.setZoomButtonsVisible(false);
 		  renderer.setPanLimits(new double[] { 0, 20, 0, 40 });
 		  renderer.setZoomLimits(new double[] { 0, 20, 0, 40 });
@@ -142,7 +144,7 @@ public class ChartView {
 		 renderer.setLabelsTextSize(size);
 		 renderer.setLegendTextSize(size);
 		 renderer.setPointSize(5f);
-		 renderer.setMargins(new int[] { Utils.dip2px(context, 10), Utils.dip2px(context, 20), Utils.dip2px(context,20), Utils.dip2px(context, 10) });
+		 renderer.setMargins(new int[] { Utils.dip2px(context, 10), Utils.dip2px(context, 30), Utils.dip2px(context,20), Utils.dip2px(context, 10) });
 	 }
 	  protected void setRenderer(XYMultipleSeriesRenderer renderer, int[] colors, PointStyle[] styles) {
 		    renderer.setAxisTitleTextSize(16);

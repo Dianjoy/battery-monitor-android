@@ -281,7 +281,7 @@ public class WiFiService extends Service {
     	WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
     	int wifiStatus = Integer.valueOf(Utils.getPreferenceStr(context, WIFI_STATUS, WifiManager.WIFI_STATE_DISABLED + ""));
     	if (wifi != null) {
-    		if (wifiStatus == WifiManager.WIFI_STATE_DISABLED && wifiStatus == WifiManager.WIFI_STATE_DISABLING) {
+    		if (wifiStatus == WifiManager.WIFI_STATE_DISABLED || wifiStatus == WifiManager.WIFI_STATE_DISABLING) {
     			wifi.setWifiEnabled(false);
     		}else{
     			wifi.setWifiEnabled(true);
