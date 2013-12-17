@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
-import com.dianjoy.batterymonitor.R;
 import com.lobster.batterymonitor.view.ChartView;
 
 public class ChartActivity extends UmentActivity {

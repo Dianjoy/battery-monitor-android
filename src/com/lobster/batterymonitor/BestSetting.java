@@ -14,8 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
-import com.dianjoy.batterymonitor.R;
 import com.lobster.batterymonitor.tools.Utils;
 import com.lobster.batterymonitor.view.ChartView;
 import com.umeng.analytics.MobclickAgent;

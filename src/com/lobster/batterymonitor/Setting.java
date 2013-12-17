@@ -21,8 +21,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.dianjoy.batterymonitor.R;
 import com.lobster.batterymonitor.tools.Cons;
 import com.lobster.batterymonitor.tools.DBManager;
 import com.lobster.batterymonitor.tools.Utils;
@@ -45,7 +43,7 @@ public class Setting extends Activity {
 		setContentView(R.layout.activity_setting);
 		Intent startIntentService = new Intent();
 		startIntentService.setClassName(this,
-				"com.dianjoy.batterymonitor.WiFiService");
+				"com.lobster.batterymonitor.WiFiService");
 		startService(startIntentService);
 		linearLayot = (LinearLayout) findViewById(R.id.bestSetting);
 		count = (LinearLayout)findViewById(R.id.count);

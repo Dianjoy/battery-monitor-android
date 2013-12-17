@@ -18,7 +18,7 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 
-import com.dianjoy.batterymonitor.R;
+import com.lobster.batterymonitor.R;
 import com.lobster.batterymonitor.tools.Cons;
 import com.lobster.batterymonitor.tools.DBManager;
 import com.lobster.batterymonitor.tools.Utils;

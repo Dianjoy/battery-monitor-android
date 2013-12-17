@@ -2,8 +2,6 @@ package com.lobster.batterymonitor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.dianjoy.batterymonitor.R;
 import com.lobster.batterymonitor.tools.AppInfo;
 import com.lobster.batterymonitor.tools.Utils;
 

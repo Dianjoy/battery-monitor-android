@@ -387,7 +387,7 @@ public class WiFiService extends Service {
 				String[] pkgList = apinfo.pkgList;
 				if (apinfo.importance > ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE) {
 					for (int j = 0; j < pkgList.length; j++) {
-						if (!pkgList[j].equals("com.dianjoy.batterymonitor")) {
+						if (!pkgList[j].equals("com.lobster.batterymonitor")) {
 							if (systemVer > 8) {
 								activityManger
 										.killBackgroundProcesses(pkgList[j]);

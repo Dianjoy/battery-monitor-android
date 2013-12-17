@@ -1,7 +1,4 @@
 package com.lobster.batterymonitor;
-
-import com.dianjoy.batterymonitor.R;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
