@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor.tools;
+package com.lobster.batterymonitor.tools;
 
 import java.util.HashMap;
 import java.util.Vector;

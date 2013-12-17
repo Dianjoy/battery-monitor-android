@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -28,9 +28,9 @@ import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.dianjoy.batterymonitor.tools.Cons;
-import com.dianjoy.batterymonitor.tools.DBManager;
-import com.dianjoy.batterymonitor.tools.Utils;
+import com.lobster.batterymonitor.tools.Cons;
+import com.lobster.batterymonitor.tools.DBManager;
+import com.lobster.batterymonitor.tools.Utils;
 
 public class WiFiService extends Service {
 	private boolean screenStatus = false;

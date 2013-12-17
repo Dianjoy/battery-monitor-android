@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import android.app.Activity;
 

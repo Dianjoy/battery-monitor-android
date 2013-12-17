@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor.tools;
+package com.lobster.batterymonitor.tools;
 
 public class Cons {
 	public static final String BATTERY_CHARGE = "charge";
@@ -6,9 +6,9 @@ public class Cons {
 	public static final String BATTERY_LEVEL = "battery_level";
 	public static final String BATTERY_CHARGE_FULL = "charge_full";
 	public static final String BATTERY_PRE = "battery_message";
-	public static final String BATTERY_COUNT = "battery_count";       //ºÄµçÁ¿µÄÈ¡µãÊýÄ¿
+	public static final String BATTERY_COUNT = "battery_count";       //ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ä¿
 	public static final String BATTERY_TIME = "battery_time";
 	public static final String BATTERY_STATUSES = "battery_status";
-	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin";  //Æðµã
+	public static final String BATTERY_COUNT_BEGIN = "battery_count_begin";  //ï¿½ï¿½ï¿½
 	public static final int MAX_COUNT = 32;
 }

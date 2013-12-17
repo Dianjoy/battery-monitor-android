@@ -3,16 +3,5 @@
      android:layout_height="fill_parent"
      android:background="@drawable/boot_page"
      android:id="@+id/boot_page">
-     <TextView
-         android:id="@+id/boot_page_text"
-         android:layout_alignParentBottom="true"
-         android:layout_marginBottom="5dp"
-         android:gravity="center"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/copyright"
-         android:textSize="15sp"/>"
-        
-
 </RelativeLayout>
     

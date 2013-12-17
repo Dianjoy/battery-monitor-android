@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.io.File;
 
@@ -15,8 +15,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-import com.dianjoy.batterymonitor.tools.Utils;
-import com.dianjoy.batterymonitor.view.ChartView;
+import com.dianjoy.batterymonitor.R;
+import com.lobster.batterymonitor.tools.Utils;
+import com.lobster.batterymonitor.view.ChartView;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 public class BestSetting extends Activity {

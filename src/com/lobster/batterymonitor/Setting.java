@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.io.File;
 import java.util.Vector;
@@ -22,9 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dianjoy.batterymonitor.tools.Cons;
-import com.dianjoy.batterymonitor.tools.DBManager;
-import com.dianjoy.batterymonitor.tools.Utils;
+import com.dianjoy.batterymonitor.R;
+import com.lobster.batterymonitor.tools.Cons;
+import com.lobster.batterymonitor.tools.DBManager;
+import com.lobster.batterymonitor.tools.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 public class Setting extends Activity {

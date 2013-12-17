@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.util.List;
 
@@ -10,22 +10,22 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 
 public class WiFiManagerOp {
-	private WifiManager wifiManager;// ÉùÃ÷¹ÜÀí¶ÔÏó
+	private WifiManager wifiManager;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	private WifiInfo wifiInfo;// WifiÐÅÏ¢
+	private WifiInfo wifiInfo;// Wifiï¿½ï¿½Ï¢
 
-	private List<ScanResult> scanResultList; // É¨Ãè³öÀ´µÄÍøÂçÁ¬½ÓÁÐ±í
+	private List<ScanResult> scanResultList; // É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 
-	private List<WifiConfiguration> wifiConfigList;// ÍøÂçÅäÖÃÁÐ±í
+	private List<WifiConfiguration> wifiConfigList;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 
-	private WifiLock wifiLock;// WifiËø
+	private WifiLock wifiLock;// Wifiï¿½ï¿½
 
 	public WiFiManagerOp(Context context) {
 		this.wifiManager = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);// »ñÈ¡Wifi·þÎñ
+				.getSystemService(Context.WIFI_SERVICE);// ï¿½ï¿½È¡Wifiï¿½ï¿½ï¿½ï¿½
 
-		// µÃµ½WifiÐÅÏ¢
-		this.wifiInfo = wifiManager.getConnectionInfo();// µÃµ½Á¬½ÓÐÅÏ¢
+		// ï¿½Ãµï¿½Wifiï¿½ï¿½Ï¢
+		this.wifiInfo = wifiManager.getConnectionInfo();// ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 
 	}
 
@@ -33,7 +33,7 @@ public class WiFiManagerOp {
 		return wifiManager.isWifiEnabled();
 	}
 
-	// ´ò¿ª/¹Ø±Õ wifi
+	// ï¿½ï¿½/ï¿½Ø±ï¿½ wifi
 	public  boolean openWifi() {
 		if (!wifiManager.isWifiEnabled()) {
 			return wifiManager.setWifiEnabled(true);
@@ -51,8 +51,8 @@ public class WiFiManagerOp {
 		}
 	}
 
-	// Ëø¶¨/½âËøwifi
-	// ÆäÊµËø¶¨WiFI¾ÍÊÇÅÐ¶ÏwifiÊÇ·ñ½¨Á¢³É¹¦£¬ÔÚÕâÀïÊ¹ÓÃµÄÊÇheld£¬ÎÕÊÖµÄÒâË¼acquire µÃµ½£¡
+	// ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½wifi
+	// ï¿½ï¿½Êµï¿½ï¿½WiFIï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½wifiï¿½Ç·ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½ï¿½heldï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ë¼acquire ï¿½Ãµï¿½ï¿½ï¿½
 	public void lockWifi() {
 
 		wifiLock.acquire();
@@ -61,23 +61,23 @@ public class WiFiManagerOp {
 
 	public void unLockWifi() {
 		if (!wifiLock.isHeld()) {
-			wifiLock.release(); // ÊÍ·Å×ÊÔ´
+			wifiLock.release(); // ï¿½Í·ï¿½ï¿½ï¿½Ô´
 		}
 	}
 
-	// ÎÒ±¾À´ÊÇÐ´ÔÚ¹¹Ôìº¯ÊýÖÐÁË£¬µ«ÊÇ¿¼ÂÇµ½²»ÊÇÃ¿´Î¶¼»áÊ¹ÓÃWifiËø£¬ËùÒÔ¸É´à×Ô¼º½¨Á¢Ò»¸ö·½·¨£¡ÐèÒªÊ±µ÷ÓÃ£¬½¨Á¢¾ÍOK
+	// ï¿½Ò±ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Ú¹ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½Î¶ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Wifiï¿½ï¿½ï¿½ï¿½ï¿½Ô¸É´ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÊ±ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½OK
 	public void createWifiLock() {
-		wifiLock = wifiManager.createWifiLock("flyfly"); // ´´½¨Ò»¸öËøµÄ±êÖ¾
+		wifiLock = wifiManager.createWifiLock("flyfly"); // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Ö¾
 	}
 
-	// É¨ÃèÍøÂç
+	// É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	public void startScan() {
 		wifiManager.startScan();
 
-		scanResultList = wifiManager.getScanResults(); // É¨Ãè·µ»Ø½á¹ûÁÐ±í
+		scanResultList = wifiManager.getScanResults(); // É¨ï¿½è·µï¿½Ø½ï¿½ï¿½ï¿½Ð±ï¿½
 
-		wifiConfigList = wifiManager.getConfiguredNetworks(); // É¨ÃèÅäÖÃÁÐ±í
+		wifiConfigList = wifiManager.getConfiguredNetworks(); // É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	}
 
 	public List<ScanResult> getWifiList() {
@@ -88,25 +88,25 @@ public class WiFiManagerOp {
 		return wifiConfigList;
 	}
 
-	// »ñÈ¡É¨ÃèÁÐ±í
+	// ï¿½ï¿½È¡É¨ï¿½ï¿½ï¿½Ð±ï¿½
 	public StringBuilder lookUpscan() {
 		StringBuilder scanBuilder = new StringBuilder();
 
 		for (int i = 0; i < scanResultList.size(); i++) {
-			scanBuilder.append("±àºÅ£º" + (i + 1));
-			scanBuilder.append(scanResultList.get(i).toString()); // ËùÓÐÐÅÏ¢
+			scanBuilder.append("ï¿½ï¿½Å£ï¿½" + (i + 1));
+			scanBuilder.append(scanResultList.get(i).toString()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 			scanBuilder.append("\n");
 		}
 
 		return scanBuilder;
 	}
 
-	// »ñÈ¡Ö¸¶¨ÐÅºÅµÄÇ¿¶È
+	// ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ÅºÅµï¿½Ç¿ï¿½ï¿½
 	public int getLevel(int NetId) {
 		return scanResultList.get(NetId).level;
 	}
 
-	// »ñÈ¡±¾»úMacµØÖ·
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Macï¿½ï¿½Ö·
 	public String getMac() {
 		return (wifiInfo == null) ? "" : wifiInfo.getMacAddress();
 	}
@@ -119,44 +119,44 @@ public class WiFiManagerOp {
 		return (wifiInfo == null) ? null : wifiInfo.getSSID();
 	}
 
-	// ·µ»Øµ±Ç°Á¬½ÓµÄÍøÂçµÄID
+	// ï¿½ï¿½ï¿½Øµï¿½Ç°ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
 	public int getCurrentNetId() {
 		return (wifiInfo == null) ? null : wifiInfo.getNetworkId();
 	}
 
-	// ·µ»ØËùÓÐÐÅÏ¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	public String getwifiInfo() {
 		return (wifiInfo == null) ? null : wifiInfo.toString();
 	}
 
-	// »ñÈ¡IPµØÖ·
+	// ï¿½ï¿½È¡IPï¿½ï¿½Ö·
 	public int getIP() {
 		return (wifiInfo == null) ? null : wifiInfo.getIpAddress();
 	}
 
-	// Ìí¼ÓÒ»¸öÁ¬½Ó
+	// ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean addNetWordLink(WifiConfiguration config) {
 		int NetId = wifiManager.addNetwork(config);
 		return wifiManager.enableNetwork(NetId, true);
 	}
 
-	// ½ûÓÃÒ»¸öÁ´½Ó
+	// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean disableNetWordLick(int NetId) {
 		wifiManager.disableNetwork(NetId);
 		return wifiManager.disconnect();
 	}
 
-	// ÒÆ³ýÒ»¸öÁ´½Ó
+	// ï¿½Æ³ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public boolean removeNetworkLink(int NetId) {
 		return wifiManager.removeNetwork(NetId);
 	}
 
-	// ²»ÏÔÊ¾SSID
+	// ï¿½ï¿½ï¿½ï¿½Ê¾SSID
 	public void hiddenSSID(int NetId) {
 		wifiConfigList.get(NetId).hiddenSSID = true;
 	}
 
-	// ÏÔÊ¾SSID
+	// ï¿½ï¿½Ê¾SSID
 	public void displaySSID(int NetId) {
 		wifiConfigList.get(NetId).hiddenSSID = false;
 	}

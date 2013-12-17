@@ -1,10 +1,11 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dianjoy.batterymonitor.tools.AppInfo;
-import com.dianjoy.batterymonitor.tools.Utils;
+import com.dianjoy.batterymonitor.R;
+import com.lobster.batterymonitor.tools.AppInfo;
+import com.lobster.batterymonitor.tools.Utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -59,22 +60,22 @@ public class WhiteList extends UmentActivity {
 		 return listItem;
 		    
      }
-	/*´æ·Å¿Ø¼þ*/ 
+	/*ï¿½ï¿½Å¿Ø¼ï¿½*/ 
     class ViewHolder{
 		 public TextView appName;
          public ImageView appIcon;
          public CheckBox select;
 	}
-	/*ÐÂ½¨Ò»¸öÀà¼Ì³ÐBaseAdapter£¬ÊµÏÖÊÓÍ¼ÓëÊý¾ÝµÄ°ó¶¨*/ 
+	/*ï¿½Â½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ì³ï¿½BaseAdapterï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ÝµÄ°ï¿½*/ 
 	private class MyAdapter extends BaseAdapter {
-	    private LayoutInflater mInflater;//µÃµ½Ò»¸öLayoutInfalter¶ÔÏóÓÃÀ´µ¼Èë²¼¾Ö /*¹¹Ôìº¯Êý*/ 
+	    private LayoutInflater mInflater;//ï¿½Ãµï¿½Ò»ï¿½ï¿½LayoutInfalterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë²¼ï¿½ï¿½ /*ï¿½ï¿½ï¿½ìº¯ï¿½ï¿½*/ 
 		public MyAdapter(Context context) {
 		    this.mInflater = LayoutInflater.from(context);
         }
 
 		@Override
 		public int getCount() {
-		    return listItem.size();//·µ»ØÊý×éµÄ³¤¶È        
+		    return listItem.size();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½        
 		}
 		@Override
 		public Object getItem(int position) {
@@ -91,15 +92,15 @@ public class WhiteList extends UmentActivity {
 		    if (convertView == null) {
 		          convertView = mInflater.inflate(R.layout.app_info_layout,null);
 		          holder = new ViewHolder();
-		                    /*µÃµ½¸÷¸ö¿Ø¼þµÄ¶ÔÏó*/                    
+		                    /*ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½*/                    
 		          holder.appName = (TextView) convertView.findViewById(R.id.app_info_name);
 		          holder.appIcon = (ImageView) convertView.findViewById(R.id.app_info_image);
 		          holder.select = (CheckBox) convertView.findViewById(R.id.app_info_select);
-		          convertView.setTag(holder);//°ó¶¨ViewHolder¶ÔÏó                   
+		          convertView.setTag(holder);//ï¿½ï¿½ViewHolderï¿½ï¿½ï¿½ï¿½                   
 		    } else{
-		          holder = (ViewHolder)convertView.getTag();//È¡³öViewHolder¶ÔÏó                  
+		          holder = (ViewHolder)convertView.getTag();//È¡ï¿½ï¿½ViewHolderï¿½ï¿½ï¿½ï¿½                  
 		    }
-		            /*ÉèÖÃTextViewÏÔÊ¾µÄÄÚÈÝ£¬¼´ÎÒÃÇ´æ·ÅÔÚ¶¯Ì¬Êý×éÖÐµÄÊý¾Ý*/             
+		            /*ï¿½ï¿½ï¿½ï¿½TextViewï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½Ú¶ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½*/             
 		    holder.appName.setText(listItem.get(position).getName());
 		    holder.appIcon.setImageDrawable(listItem.get(position).getIcon());
 		    
@@ -128,25 +129,25 @@ public class WhiteList extends UmentActivity {
 	public Drawable zoomDrawable(Drawable drawable, int w, int h) {
 		int width = drawable.getIntrinsicWidth();
 		int height = drawable.getIntrinsicHeight();
-		Bitmap oldbmp = drawableToBitmap(drawable); // drawable×ª»»³Ébitmap
-		Matrix matrix = new Matrix(); // ´´½¨²Ù×÷Í¼Æ¬ÓÃµÄMatrix¶ÔÏó
-		float scaleWidth = ((float) w / width); // ¼ÆËãËõ·Å±ÈÀý
+		Bitmap oldbmp = drawableToBitmap(drawable); // drawable×ªï¿½ï¿½ï¿½ï¿½bitmap
+		Matrix matrix = new Matrix(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½Ãµï¿½Matrixï¿½ï¿½ï¿½ï¿½
+		float scaleWidth = ((float) w / width); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
 		float scaleHeight = ((float) h / height);
-		matrix.postScale(scaleWidth, scaleHeight); // ÉèÖÃËõ·Å±ÈÀý
+		matrix.postScale(scaleWidth, scaleHeight); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½
 		Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height,
-				matrix, true); // ½¨Á¢ÐÂµÄbitmap£¬ÆäÄÚÈÝÊÇ¶ÔÔ­bitmapµÄËõ·ÅºóµÄÍ¼
-		return new BitmapDrawable(newbmp); // °Ñbitmap×ª»»³Édrawable²¢·µ»Ø
+				matrix, true); // ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½bitmapï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½Ô­bitmapï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½Í¼
+		return new BitmapDrawable(newbmp); // ï¿½ï¿½bitmap×ªï¿½ï¿½ï¿½ï¿½drawableï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	}
 
 	public Bitmap drawableToBitmap(Drawable drawable) {
-		int width = drawable.getIntrinsicWidth(); // È¡drawableµÄ³¤¿í
+		int width = drawable.getIntrinsicWidth(); // È¡drawableï¿½Ä³ï¿½ï¿½ï¿½
 		int height = drawable.getIntrinsicHeight();
 		Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-				: Bitmap.Config.RGB_565; // È¡drawableµÄÑÕÉ«¸ñÊ½
-		Bitmap bitmap = Bitmap.createBitmap(width, height, config); // ½¨Á¢¶ÔÓ¦bitmap
-		Canvas canvas = new Canvas(bitmap); // ½¨Á¢¶ÔÓ¦bitmapµÄ»­²¼
+				: Bitmap.Config.RGB_565; // È¡drawableï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Ê½
+		Bitmap bitmap = Bitmap.createBitmap(width, height, config); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦bitmap
+		Canvas canvas = new Canvas(bitmap); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦bitmapï¿½Ä»ï¿½ï¿½ï¿½
 		drawable.setBounds(0, 0, width, height);
-		drawable.draw(canvas); // °ÑdrawableÄÚÈÝ»­µ½»­²¼ÖÐ
+		drawable.draw(canvas); // ï¿½ï¿½drawableï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		return bitmap;
 	}
 	public int dip2px(Context context, float dipValue) {

@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor.view;
+package com.lobster.batterymonitor.view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,9 +19,9 @@ import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 
 import com.dianjoy.batterymonitor.R;
-import com.dianjoy.batterymonitor.tools.Cons;
-import com.dianjoy.batterymonitor.tools.DBManager;
-import com.dianjoy.batterymonitor.tools.Utils;
+import com.lobster.batterymonitor.tools.Cons;
+import com.lobster.batterymonitor.tools.DBManager;
+import com.lobster.batterymonitor.tools.Utils;
 
 public class ChartView {
 	private Context context;

@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

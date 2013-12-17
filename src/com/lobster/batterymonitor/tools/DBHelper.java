@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor.tools;
+package com.lobster.batterymonitor.tools;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

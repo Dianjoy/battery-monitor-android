@@ -1,7 +1,9 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.dianjoy.batterymonitor.R;
 
 import android.content.Intent;
 import android.os.Bundle;

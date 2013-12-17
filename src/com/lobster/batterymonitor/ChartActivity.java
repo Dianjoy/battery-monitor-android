@@ -1,4 +1,4 @@
-package com.dianjoy.batterymonitor;
+package com.lobster.batterymonitor;
 
 import org.achartengine.GraphicalView;
 
@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-import com.dianjoy.batterymonitor.view.ChartView;
+import com.dianjoy.batterymonitor.R;
+import com.lobster.batterymonitor.view.ChartView;
 
 public class ChartActivity extends UmentActivity {
 	private LinearLayout batteryCount;
