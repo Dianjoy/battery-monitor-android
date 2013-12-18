@@ -8,12 +8,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
 import com.lobster.batterymonitor.tools.Utils;
 import com.lobster.batterymonitor.view.ChartView;
 import com.umeng.analytics.MobclickAgent;
@@ -22,6 +25,8 @@ public class BestSetting extends Activity {
 	private CheckBox checkBoxGetInfo;
 	private CheckBox checkBoxGetProgress;
 	private FeedbackAgent agent;// = new FeedbackAgent(this);
+	private LinearLayout layout;
+	private GraphicalView chart;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class BestSetting extends Activity {
 				});
 		agent = new FeedbackAgent(this);
 		agent.sync();
+		layout = (LinearLayout) findViewById(R.id.best_setting);
 		this.createGraphicalView();
 	}
 
@@ -103,21 +109,27 @@ public class BestSetting extends Activity {
 			dir.mkdirs();
 		}
 		long current = System.currentTimeMillis();
-		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + current + ".png");
+		TextView batteryCount = (TextView) findViewById(R.id.best_setting_battery_count);
+		int x = chart.getLeft();
+		int y = batteryCount.getTop();
+		int w = chart.getWidth();
+		int h = chart.getHeight() + batteryCount.getHeight();
+		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + current + ".png",x,y,w,h);
 		String shareTitle = this.getResources().getString(R.string.share_title);
 		String shareContent = this.getResources().getString(R.string.share_content);
 		Utils.shareMsg(BestSetting.this, shareTitle, shareTitle, shareContent, dir.getAbsolutePath() + "/" + current + ".png");
+		File file = new File(dir.getAbsolutePath() + "/" + current + ".png");
+		file.deleteOnExit();
 	}
 	public void createGraphicalView() {
 		ChartView chartView = new ChartView(this);
-		GraphicalView chart = chartView.getData();
+		chart = chartView.getData();
 		chart.setBackgroundColor(0x88222222);
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		params.topMargin = 30;
 		params.leftMargin = 30;
 		params.rightMargin = 30;
 		params.bottomMargin = Utils.dip2px(this, 45);
-		LinearLayout  layout = (LinearLayout) findViewById(R.id.best_setting);
 		layout.addView(chart, params);
 		
 	}

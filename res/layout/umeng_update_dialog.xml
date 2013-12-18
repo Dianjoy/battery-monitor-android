@@ -114,7 +114,6 @@
 
             <Button
                 android:id="@+id/umeng_update_id_ignore"
-				android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

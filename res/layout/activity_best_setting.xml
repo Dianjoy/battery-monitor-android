@@ -71,6 +71,7 @@
         android:clickable="true"
         android:onClick="settingWhiteList" />
 	  <TextView
+	    android:id="@+id/best_setting_battery_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"

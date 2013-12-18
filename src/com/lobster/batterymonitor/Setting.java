@@ -21,10 +21,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.lobster.batterymonitor.tools.Cons;
 import com.lobster.batterymonitor.tools.DBManager;
 import com.lobster.batterymonitor.tools.Utils;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 public class Setting extends Activity {
 	private CheckBox checkBoxGetInfo;
@@ -41,6 +43,7 @@ public class Setting extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
+		UmengUpdateAgent.update(this);
 		Intent startIntentService = new Intent();
 		startIntentService.setClassName(this,
 				"com.lobster.batterymonitor.WiFiService");

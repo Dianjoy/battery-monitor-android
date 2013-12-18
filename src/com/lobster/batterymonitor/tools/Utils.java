@@ -58,7 +58,7 @@ public class Utils {
 		return (int) (pxValue / scale + 0.5f);
 	}
 
-	private static Bitmap takeScreenShot(Activity activity) {
+	private static Bitmap takeScreenShot(Activity activity, int... params) {
 		// View鏄綘闇�鎴浘鐨刅iew
 		View view = activity.getWindow().getDecorView();
 		view.setDrawingCacheEnabled(true);
@@ -77,14 +77,21 @@ public class Utils {
 		width = Math.min(width, b1.getWidth());
 		statusBarHeight = Math.max(0, statusBarHeight);
 		// Bitmap b = Bitmap.createBitmap(b1, 0, 25, 320, 455);
-		Bitmap b = Bitmap.createBitmap(b1, 0, statusBarHeight, width, height
+		Bitmap b;
+		if(params.length == 4) {
+			Log.i("test",b1.getWidth() + " " + b1.getHeight());
+			Log.i("test",params[0] + " " + params[1] + " " + params[2] + " " + params[3]);
+			b = Bitmap.createBitmap(b1, params[0], params[1], params[2], params[3]);
+		}else{
+			b = Bitmap.createBitmap(b1, 0, statusBarHeight, width, height
 				- statusBarHeight);
+		}
 		view.destroyDrawingCache();
 		return b;
 	}
 
-	public static void savePic(Activity activity, String strFileName) {
-		Bitmap b = takeScreenShot(activity);
+	public static void savePic(Activity activity, String strFileName, int... params) {
+		Bitmap b = takeScreenShot(activity, params);
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(strFileName);
@@ -118,4 +125,24 @@ public class Utils {
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(Intent.createChooser(intent, activityTitle));
 	} 
+	/* 
+     * 获取控件宽 
+     */  
+    public static int getWidth(View view)  
+    {  
+        int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);  
+        int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);  
+        view.measure(w, h);  
+        return (view.getMeasuredWidth());         
+    }  
+    /* 
+     * 获取控件高 
+     */  
+    public static int getHeight(View view)  
+    {  
+        int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);  
+        int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);  
+        view.measure(w, h);  
+        return (view.getMeasuredHeight());         
+    }  
 }

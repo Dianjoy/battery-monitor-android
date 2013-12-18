@@ -34,6 +34,10 @@
         </activity>
 
         <service android:name="com.lobster.batterymonitor.WiFiService" />
+        <service
+    		android:name="com.umeng.common.net.DownloadingService"
+    		android:process=":DownloadingService" >
+		</service>
 
         <receiver
             android:name="com.lobster.batterymonitor.MainReceiver"

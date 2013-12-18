@@ -2,14 +2,18 @@ package com.lobster.batterymonitor;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.umeng.update.UmengUpdateAgent;
 
 public class BootActivity extends UmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_boot);
+		
 		startMainActivity();
 	}
 	public void startMainActivity() {
