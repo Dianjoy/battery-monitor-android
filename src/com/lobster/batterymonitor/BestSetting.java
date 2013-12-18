@@ -114,10 +114,10 @@ public class BestSetting extends Activity {
 		int y = batteryCount.getTop();
 		int w = chart.getWidth();
 		int h = chart.getHeight() + batteryCount.getHeight();
-		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + current + ".png",x,y,w,h);
+		Utils.savePic(BestSetting.this, dir.getAbsolutePath() + "/" + "电量统计曲线图" + ".png",x,y,w,h);
 		String shareTitle = this.getResources().getString(R.string.share_title);
 		String shareContent = this.getResources().getString(R.string.share_content);
-		Utils.shareMsg(BestSetting.this, shareTitle, shareTitle, shareContent, dir.getAbsolutePath() + "/" + current + ".png");
+		Utils.shareMsg(BestSetting.this, shareTitle, shareTitle, shareContent, dir.getAbsolutePath() + "/" + "电量统计曲线图" + ".png");
 		File file = new File(dir.getAbsolutePath() + "/" + current + ".png");
 		file.deleteOnExit();
 	}

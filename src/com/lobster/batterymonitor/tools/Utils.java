@@ -115,7 +115,7 @@ public class Utils {
 		} else {
 			File f = new File(imgPath);
 			if (f != null && f.exists() && f.isFile()) {
-				intent.setType("image/png");
+				intent.setType("image/png;text/plain");
 				Uri u = Uri.fromFile(f);
 				intent.putExtra(Intent.EXTRA_STREAM, u);
 			}
